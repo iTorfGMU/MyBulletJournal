@@ -1,6 +1,7 @@
 package com.torfin.mybulletjournal;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -26,8 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //TODO add navigation to add new task
             }
         });
 
@@ -73,24 +73,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (item.getItemId()) {
+            case R.id.monthly_log:
+                //TODO add navigation to monthly log
+                break;
+            case R.id.future_log:
+                //TODO add navigation to future log
+                break;
+            case R.id.manage_label:
+                //TODO add navigation to manage labels
+                break;
+            case R.id.nav_settings:
+                //TODO add navigation to manage settings
+                break;
+            default:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

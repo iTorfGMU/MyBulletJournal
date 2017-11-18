@@ -3,6 +3,23 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+
+    <!--Add New Tasks-->
+    <string name="task">Task:</string>
+    <string name="task_label">Label:</string>
+    <string name="task_type">Type of Task:</string>
+    <string name="task_date">Date:</string>
+    <string name="taskname_hint">Enter task name here</string>
+    <string name="tasklabel_hint">Enter task name here</string>
+    <string name="tasktype_hint">Enter task name here</string>
+    <string name="taskdate_hint">Enter task name here</string>
+
+    <string-array name="task_labels">
+        <item>Home</item>
+    </string-array>
+
+    <!--Content Descriptions-->
+    <string name="date_container_button_cd">Next Date</string>
+    <string name="date_previous_container_button_cd">Previous Date</string>
 </resources>
