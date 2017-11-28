@@ -10,4 +10,6 @@
     <color name="textColorPrimary">@android:color/white</color>
     <color name="textColorAccent">@android:color/black</color>
     <color name="textColorAccentDark">@android:color/white</color>
+
+    <color name="translucent_black">#80000000</color>
 </resources>

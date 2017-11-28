@@ -10,16 +10,36 @@
     <string name="task_label">Label:</string>
     <string name="task_type">Type of Task:</string>
     <string name="task_date">Date:</string>
+    <string name="task_time">Time:</string>
     <string name="taskname_hint">Enter task name here</string>
     <string name="tasklabel_hint">Enter task name here</string>
     <string name="tasktype_hint">Enter task name here</string>
-    <string name="taskdate_hint">Enter task name here</string>
+    <string name="taskdate_hint">Select a date</string>
+    <string name="tasktime_hint">Select a time (optional)</string>
 
     <string-array name="task_labels">
+        <item>Choose a task label</item>
         <item>Home</item>
     </string-array>
+
+    <string-array name="task_type_labels">
+        <item>Choose a task type</item>
+    </string-array>
+
+    <!--Future Log-->
+    <string name="future_log_heading">Future at a glance</string>
+
+    <!--Task Details-->
+    <string name="task_details_button_text">Delete This Task</string>
+    <string name="current_status">Current Status:</string>
+
+    <!--Widget-->
+    <string name="widget_heading">What\'s going on today?</string>
+
 
     <!--Content Descriptions-->
     <string name="date_container_button_cd">Next Date</string>
     <string name="date_previous_container_button_cd">Previous Date</string>
+    <string name="task_label_content_description">Change Task Label</string>
+    <string name="task_details_status_icon_cd">Current Task Status</string>
 </resources>
