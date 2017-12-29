@@ -67,15 +67,9 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         calendar.setTimeInMillis(time);
         long dayOne = calendar.getTimeInMillis();
 
-        Log.d(TAG, "DATE ONE: " + dateFormat.format(calendar.getTime()) + " @ " + timeFormat.format(calendar.getTime()));
-        Log.d(TAG, "DATE ONE: " + calendar.getTime());
-
         long nextDay = DateUtils.addDays(calendar.getTime(), 1);
         calendar.setTimeInMillis(nextDay);
         long dayTwo = calendar.getTimeInMillis();
-
-        Log.d(TAG, "DATE TWO: " + dateFormat.format(calendar.getTime()) + " @ " + timeFormat.format(calendar.getTime()));
-        Log.d(TAG, "DATE TWO: " + calendar.getTime());
 
         new RetrieveTasksWithDate().execute(dayOne, dayTwo);
     }

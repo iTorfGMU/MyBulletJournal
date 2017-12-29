@@ -27,7 +27,7 @@
             android:src="@drawable/ic_user_profile_24dp" />
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin"
@@ -37,7 +37,8 @@
             android:textSize="@dimen/label_textsize"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:fontFamily="@string/font_family_medium"
-            android:textColor="@color/imageAccentColor"/>
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 

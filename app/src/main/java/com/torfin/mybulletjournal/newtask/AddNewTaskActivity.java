@@ -103,8 +103,6 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
         timePickerContainer.setOnClickListener(this);
         timePicker.setOnTimeChangedListener(presenter);
 
-        this.presenter.getLabels();
-
         if (!isNetworkConnected()) {
             showMessage("It appears you are not connected to a network.");
         }
@@ -197,6 +195,15 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
     public void signout() {
         LoginActivity.start(this);
         finish();
+    }
+
+    @Override
+    public void refreshLabelSpinner() {
+        ArrayAdapter<String> labelArrayAdapter = presenter.getLabelArrayAdapter();
+        labelArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        taskLabelSpinner.setAdapter(labelArrayAdapter);
+        taskLabelSpinner.setSelection(0);
     }
 
     @Override

@@ -27,13 +27,15 @@ public class TaskLabelProvider implements ChildEventListener {
 
     private static DatabaseReference database;
 
-    private static FirebaseUser user;
+    private static long numOfLabels;
 
-    public static TaskLabelProvider getInstance() {
+    private List<LabelsCallback> callbacks;
+
+    public static TaskLabelProvider getInstance(LabelsCallback callback) {
         if (instance == null) {
             synchronized (TaskLabelProvider.class) {
                 if (instance == null) {
-                    instance = new TaskLabelProvider();
+                    instance = new TaskLabelProvider(callback);
                 }
             }
         }
@@ -41,28 +43,38 @@ public class TaskLabelProvider implements ChildEventListener {
         return instance;
     }
 
-    private TaskLabelProvider() {
+    private TaskLabelProvider(LabelsCallback callback) {
         database = FirebaseDatabase.getInstance().getReference().child("labels");
         database.orderByKey().addChildEventListener(this);
+        callbacks = new ArrayList<>();
+        callbacks.add(callback);
     }
 
     public List<String> getLabels() {
         if (labels == null) {
             labels = new ArrayList<>();
-            labels.add("Choose a task label");
         }
 
         return labels;
     }
 
+    public interface LabelsCallback {
+        void labelsReturned();
+    }
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        String label = dataSnapshot.getValue(String.class);
-        Log.d(TAG + " LABEL KEY", dataSnapshot.getKey());
-        Log.d(TAG + " LABEL VALUE", label);
 
-        labels.add(label);
+        if (dataSnapshot.getValue() instanceof String) {
+            String label = dataSnapshot.getValue(String.class);
+            labels.add(label);
+
+            if (labels.size() == numOfLabels) {
+                notifyCallbacks();
+            }
+        } else if (dataSnapshot.getValue() instanceof Long) {
+            numOfLabels = dataSnapshot.getValue(Long.class);
+        }
     }
 
     @Override
@@ -83,5 +95,11 @@ public class TaskLabelProvider implements ChildEventListener {
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+    private void notifyCallbacks() {
+        for (LabelsCallback callback : callbacks) {
+            callback.labelsReturned();
+        }
     }
 }

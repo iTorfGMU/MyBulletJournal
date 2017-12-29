@@ -26,6 +26,7 @@ import com.torfin.mybulletjournal.dataobjects.Task;
 import com.torfin.mybulletjournal.login.LoginActivity;
 import com.torfin.mybulletjournal.newtask.AddNewTaskActivity;
 import com.torfin.mybulletjournal.taskslist.recyclerview.TasksRecyclerViewAdapter;
+import com.torfin.mybulletjournal.viewlabels.ViewLabelsActivity;
 
 import java.util.HashMap;
 
@@ -184,11 +185,8 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
             case R.id.future_log:
                 //TODO add navigation to future log
                 break;
-            case R.id.manage_label:
-                //TODO add navigation to manage labels
-                break;
-            case R.id.nav_settings:
-                //TODO add navigation to manage settings
+            case R.id.view_labels:
+                ViewLabelsActivity.start(this);
                 break;
             case R.id.nav_sign_out:
                 FirebaseAuth.getInstance().signOut();

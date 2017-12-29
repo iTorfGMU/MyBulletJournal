@@ -48,6 +48,8 @@ class AddNewTaskContract {
 
         void signout();
 
+        void refreshLabelSpinner();
+
         void showDatePicker();
 
         void hideDatePicker();

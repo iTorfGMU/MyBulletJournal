@@ -12,7 +12,7 @@
     <string name="add_task_button">Add Task</string>
     <string name="task">Task:</string>
     <string name="task_label">Label:</string>
-    <string name="task_type">Type of Task:</string>
+    <string name="task_type">Task Type:</string>
     <string name="task_date">Date:</string>
     <string name="task_time">Time:</string>
     <string name="taskname_hint">Enter task name here</string>
@@ -41,17 +41,31 @@
         <item>NOTE</item>
     </string-array>
 
+    <string-array name="task_update_labels">
+        <item>TASK</item>
+        <item>TASK COMPLETED</item>
+        <item>TASK CANCELLED</item>
+        <item>TASK SCHEDULED</item>
+        <item>TASK RESCHEDULED</item>
+    </string-array>
+
     <string name="event_task_type">EVENT</string>
-    <string name="task_task_type">TASK</string>
     <string name="deadline_task_type">DEADLINE</string>
     <string name="urgent_task_type">URGENT</string>
     <string name="note_task_type">NOTE</string>
+
+    <string name="type_task">TASK</string>
+    <string name="completed_type_task">TASK COMPLETED</string>
+    <string name="cancelled_type_task">TASK CANCELLED</string>
+    <string name="scheduled_type_task">TASK SCHEDULED</string>
+    <string name="rescheduled_type_task">TASK RESCHEDULED</string>
 
     <!--Future Log-->
     <string name="future_log_heading">Future at a glance</string>
 
     <!--Task Details-->
-    <string name="task_details_button_text">Delete This Task</string>
+    <string name="task_details_update_button_text">Update</string>
+    <string name="task_details_delete_button_text">Delete</string>
     <string name="current_status">Current Status:</string>
 
     <!--Widget-->
@@ -67,7 +81,18 @@
     <string name="date_container_button_cd">Next Date</string>
     <string name="date_previous_container_button_cd">Previous Date</string>
     <string name="task_label_content_description">Change Task Label</string>
-    <string name="task_details_status_icon_cd">Current Task Status</string>
+    <string name="task_details_status_icon_cd">Current Task Status Icon</string>
     <string name="app_logo_cd">Application Logo</string>
+    <string name="menu_view_labels">View Labels</string>
+    <string name="menu_future_log">Future Log</string>
+    <string name="menu_monthly_log">Monthly Log</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_sign_out">Sign Out</string>
+
+    <!--Titles-->
     <string name="title_activity_add_task">Add New Task</string>
+    <string name="title_activity_view_labels">View Labels</string>
+    <string name="title_activity_future_log">Future Log</string>
+    <string name="title_activity_monthly_log">Monthly Log</string>
+
 </resources>

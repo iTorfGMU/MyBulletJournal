@@ -19,9 +19,36 @@
         </activity>
 
         <activity android:name=".login.LoginActivity"/>
+
         <activity android:name=".taskslist.TasksListActivity"/>
 
-        <activity android:name=".monthlylog.MonthlyLogActivity"/>
+        <activity android:name=".viewlabels.ViewLabelsActivity"
+            android:label="@string/title_activity_view_labels"
+            android:parentActivityName=".taskslist.TasksListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".taskslist.TasksListActivity" />
+        </activity>
+
+        <activity android:name=".monthlylog.MonthlyLogActivity"
+            android:label="@string/title_activity_monthly_log"
+            android:parentActivityName=".taskslist.TasksListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".taskslist.TasksListActivity" />
+        </activity>
+
+        <activity android:name=".futurelog.FutureLogActivity"
+            android:label="@string/title_activity_future_log"
+            android:parentActivityName=".taskslist.TasksListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".taskslist.TasksListActivity" />
+        </activity>
+
         <activity android:name=".newtask.AddNewTaskActivity"
             android:label="@string/title_activity_add_task"
             android:parentActivityName=".taskslist.TasksListActivity" >
@@ -30,7 +57,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".taskslist.TasksListActivity" />
         </activity>
-        <activity android:name=".taskdetails.TaskDetailsActivity"/>
+
+        <activity android:name=".taskdetails.TaskDetailsActivity"
+            android:parentActivityName=".taskslist.TasksListActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".taskslist.TasksListActivity" />
+        </activity>
 
     </application>
 

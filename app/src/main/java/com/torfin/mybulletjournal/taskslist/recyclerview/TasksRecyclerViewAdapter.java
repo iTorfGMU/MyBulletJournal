@@ -40,7 +40,6 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     @Override
     public TasksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_object, parent, false);
-
         return new TasksViewHolder(view, parent.getContext());
     }
 
@@ -73,6 +72,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
         private Context context;
 
+        private Task task;
+
         TasksViewHolder(View itemView, Context c) {
             super(itemView);
 
@@ -83,7 +84,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         }
 
         void bind(int position) {
-            Task task = tasks.get(position);
+            task = tasks.get(position);
 
             int taskType = getTaskImage(task);
             if (taskType != -1) {
@@ -111,7 +112,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
         @Override
         public void onClick(View v) {
-            TaskDetailsActivity.start(context, getAdapterPosition());
+            TaskDetailsActivity.start(context, task.uid);
         }
 
         private int getTaskImage(Task task) {

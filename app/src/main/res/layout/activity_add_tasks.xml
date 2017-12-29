@@ -309,7 +309,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/add_task_progress_bar_container"
         android:layout_width="0dp"

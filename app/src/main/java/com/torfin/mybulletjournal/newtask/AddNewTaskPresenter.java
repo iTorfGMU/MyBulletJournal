@@ -14,6 +14,7 @@ import com.torfin.mybulletjournal.utils.DateUtils;
 import com.torfin.mybulletjournal.utils.ProfileUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, ProfileUtils.VerifyListener, TasksProvider.TaskAdded,
-        DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
+        DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener, TaskLabelProvider.LabelsCallback{
 
     private AddNewTaskContract.View view;
 
@@ -44,7 +45,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
     private AddNewTaskPresenter(Context c) {
         this.context = c;
         tasksProvider = TasksProvider.getInstance(c, this);
-        labelProvider = TaskLabelProvider.getInstance();
+        labelProvider = TaskLabelProvider.getInstance(this);
         dateFormat = new SimpleDateFormat("EEEE, MMM dd, YYYY", Locale.getDefault());
         timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
 
@@ -58,7 +59,14 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public List<String> getLabels() {
-        return labelProvider.getLabels();
+        List<String> labels = new ArrayList<>();
+        labels.add("Choose a task label");
+
+        for (String label : labelProvider.getLabels()) {
+            labels.add(label);
+        }
+
+        return labels;
     }
 
     @Override
@@ -177,6 +185,11 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
         selectedDate = calendar.getTime();
 
         this.view.onTimePicked(DateUtils.formatDate(selectedDate, timeFormat));
+    }
+
+    @Override
+    public void labelsReturned() {
+        this.view.refreshLabelSpinner();
     }
 
     private class AddTask extends AsyncTask<Task, Void, Void> {

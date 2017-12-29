@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/view_labels_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/view_labels_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/labels_refresh_layout"
+        android:layout_below="@id/view_labels_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/view_labels_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/view_labels_app_bar"
+            android:padding="@dimen/default_padding"
+            android:layout_margin="@dimen/default_margin"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/view_label_progress_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/translucent_black"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/view_label_progress_bar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

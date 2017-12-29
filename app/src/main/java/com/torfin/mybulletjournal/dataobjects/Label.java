@@ -13,10 +13,14 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Label {
 
-    String label;
+    public String label;
 
     public Label() {
 
+    }
+
+    public Label(String labelText) {
+        this.label = labelText;
     }
 
     @Exclude
