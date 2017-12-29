@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.torfin.mybulletjournal.MainActivity"
+    tools:context="com.torfin.mybulletjournal.taskslist.TasksListActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -17,42 +17,42 @@
         app:layout_constraintTop_toTopOf="parent"
         android:padding="@dimen/default_padding"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        android:id="@+id/date_container">
+        android:id="@+id/date_container"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/previous_date_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
+            android:layout_margin="@dimen/default_margin"
+            android:padding="@dimen/default_padding"
             android:contentDescription="@string/date_previous_container_button_cd"/>
 
         <TextView
             android:id="@+id/date_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="10/25/2017"
+            tools:text="Monday, Dec 25, 2017"
             android:textSize="@dimen/default_textsize"
             android:textColor="@color/textColorAccentDark"
-            android:layout_toRightOf="@id/previous_date_button"
-            android:layout_centerVertical="true"/>
+            android:gravity="center"
+            android:layout_margin="@dimen/default_margin"
+            android:padding="@dimen/default_padding"/>
 
         <ImageButton
             android:id="@+id/next_date_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_forward_arrow_24dp"
+            android:layout_margin="@dimen/default_margin"
+            android:padding="@dimen/default_padding"
             android:contentDescription="@string/date_container_button_cd"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="wrap_content"
@@ -60,16 +60,50 @@
         android:background="@color/colorPrimaryLight"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/view" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/tasks_recycler_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/default_margin"
         app:layout_constraintTop_toBottomOf="@+id/date_container"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/tasks_loading_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/IconAccent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/no_tasks_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_tasks_message"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/label_textsize"
+        android:fontFamily="@string/font_family_condensed"
+        android:padding="@dimen/default_padding"
+        android:layout_margin="@dimen/default_margin"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        />
 
 
 </android.support.constraint.ConstraintLayout>
