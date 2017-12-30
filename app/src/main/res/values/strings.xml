@@ -21,6 +21,7 @@
     <string name="taskdate_hint">Select a date (optional)</string>
     <string name="tasktime_hint">Select a time (optional)</string>
 
+    <!--Login-->
     <string name="login_email">Email:</string>
     <string name="login_password">Password:</string>
     <string name="login_email_hint">Enter Email</string>
@@ -60,6 +61,9 @@
     <string name="scheduled_type_task">TASK SCHEDULED</string>
     <string name="rescheduled_type_task">TASK RESCHEDULED</string>
 
+    <!--Monthly Log-->
+    <string name="view_tasks">View Tasks</string>
+
     <!--Future Log-->
     <string name="future_log_heading">Future at a glance</string>
 
@@ -81,7 +85,7 @@
     <string name="date_container_button_cd">Next Date</string>
     <string name="date_previous_container_button_cd">Previous Date</string>
     <string name="task_label_content_description">Change Task Label</string>
-    <string name="task_details_status_icon_cd">Current Task Status Icon</string>
+    <string name="task_details_status_icon_cd">Task Status Icon</string>
     <string name="app_logo_cd">Application Logo</string>
     <string name="menu_view_labels">View Labels</string>
     <string name="menu_future_log">Future Log</string>

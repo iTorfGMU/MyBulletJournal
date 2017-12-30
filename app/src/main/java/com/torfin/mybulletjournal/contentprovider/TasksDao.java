@@ -33,4 +33,7 @@ public interface TasksDao {
     @Query("SELECT * FROM tasks WHERE task_date BETWEEN :dateOne AND :dateTwo")
     public List<Task> findTaskswithDate(long dateOne, long dateTwo);
 
+    @Query("SELECT * FROM tasks WHERE task_date > :startDate")
+    public List<Task> getFutureTasks(long startDate);
+
 }

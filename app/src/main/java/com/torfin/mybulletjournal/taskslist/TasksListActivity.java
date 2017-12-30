@@ -23,11 +23,15 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.dataobjects.Task;
+import com.torfin.mybulletjournal.futurelog.FutureLogActivity;
+import com.torfin.mybulletjournal.futurelog.FutureLogPresenter;
 import com.torfin.mybulletjournal.login.LoginActivity;
+import com.torfin.mybulletjournal.monthlylog.MonthlyLogActivity;
 import com.torfin.mybulletjournal.newtask.AddNewTaskActivity;
 import com.torfin.mybulletjournal.taskslist.recyclerview.TasksRecyclerViewAdapter;
 import com.torfin.mybulletjournal.viewlabels.ViewLabelsActivity;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -73,12 +77,16 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
 
     private TasksRecyclerViewAdapter adapter;
 
+    private boolean showDateTasks;
+
+    private long dateInMilliseconds;
+
     public static void start(Context context) {
         Intent intent = new Intent(context, TasksListActivity.class);
         context.startActivity(intent);
     }
 
-    public static void start(Context context, String date) {
+    public static void start(Context context, long date) {
         Intent intent = new Intent(context, TasksListActivity.class);
         intent.putExtra(DATE_KEY, date);
         context.startActivity(intent);
@@ -122,14 +130,24 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
 
         nextDateButton.setOnClickListener(this);
         previousDateButton.setOnClickListener(this);
+
+        //check if called from monthly log
+        dateInMilliseconds = getIntent().getLongExtra(DATE_KEY, 0);
+        if (dateInMilliseconds != 0) {
+            showDateTasks = true;
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        currentDateTextView.setText(R.string.all_tasks_header);
-        presenter.getTasks();
+        if (!showDateTasks) {
+            currentDateTextView.setText(R.string.all_tasks_header);
+            presenter.getTasks();
+        } else {
+            presenter.getTasksWithDate(dateInMilliseconds);
+        }
     }
 
     @Override
@@ -180,10 +198,10 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
 
         switch (item.getItemId()) {
             case R.id.monthly_log:
-                //TODO add navigation to monthly log
+                MonthlyLogActivity.start(this);
                 break;
             case R.id.future_log:
-                //TODO add navigation to future log
+                FutureLogActivity.start(this);
                 break;
             case R.id.view_labels:
                 ViewLabelsActivity.start(this);

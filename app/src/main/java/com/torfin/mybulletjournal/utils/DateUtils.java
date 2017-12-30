@@ -4,12 +4,15 @@ package com.torfin.mybulletjournal.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by torftorf1 on 12/26/17.
  */
 
 public class DateUtils {
+
+    private static SimpleDateFormat defaultFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
 
     public static long addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
@@ -20,6 +23,34 @@ public class DateUtils {
 
     public static String formatDate(Date date, SimpleDateFormat format) {
         return format.format(date);
+    }
+
+    public static String formatDate(long date, SimpleDateFormat format) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+
+        return format.format(cal.getTime());
+    }
+
+    public static String formatDate(long date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+
+        return defaultFormat.format(cal.getTime());
+    }
+
+    public static int getMonth(long date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+
+        return cal.get(Calendar.MONTH);
+    }
+
+    public static Date getDate(long date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+
+        return cal.getTime();
     }
 
 }

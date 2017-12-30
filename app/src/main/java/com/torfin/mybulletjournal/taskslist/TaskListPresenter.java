@@ -75,6 +75,29 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
     }
 
     @Override
+    public void getTasksWithDate(long date) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        calendar.setTimeInMillis(date);
+
+        this.view.setDate(DateUtils.formatDate(calendar.getTime(), dateFormat));
+
+        long dayOne = calendar.getTimeInMillis();
+
+        long nextDay = DateUtils.addDays(calendar.getTime(), 1);
+        calendar.setTimeInMillis(nextDay);
+        long dayTwo = calendar.getTimeInMillis();
+
+
+        new RetrieveTasksWithDate().execute(dayOne, dayTwo);
+    }
+
+    @Override
     public void subscribe(TaskListContract.View v) {
         this.view = v;
     }

@@ -122,6 +122,10 @@ public class TasksProvider {
         return localDatabase.tasksDao().findTaskswithDate(dateOne, dateTwo);
     }
 
+    public List<Task> getFutureTasks(long startDate) {
+        return localDatabase.tasksDao().getFutureTasks(startDate);
+    }
+
     public void updateTasksDatabase(Task task) {
         localDatabase.tasksDao().updateTask(task);
         updateDatabase(task);

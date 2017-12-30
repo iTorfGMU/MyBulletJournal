@@ -6,13 +6,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/future_log_appbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/future_log_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/future_log_appbar"
         android:padding="@dimen/default_padding"
         android:orientation="horizontal"
         android:id="@+id/date_container">
@@ -22,11 +39,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/future_log_heading"
-            android:textSize="@dimen/default_textsize"
+            android:textSize="@dimen/label_textsize"
             android:textColor="@color/textColorAccent"
             android:gravity="center"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/default_margin"
+            android:padding="@dimen/default_padding"/>
 
         <View
             android:layout_width="match_parent"
@@ -39,17 +58,46 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/month_year_title"
+        android:id="@+id/future_log_recycler_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:gravity="center"
         android:textSize="@dimen/label_textsize"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_container"
-        android:layout_margin="@dimen/default_margin"
-        android:padding="@dimen/default_padding"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/default_margin"
+        android:padding="@dimen/default_padding" />
+
+
+    <LinearLayout
+        android:id="@+id/future_log_progress_bar_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/translucent_black"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/future_log_progress_bar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp" />
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

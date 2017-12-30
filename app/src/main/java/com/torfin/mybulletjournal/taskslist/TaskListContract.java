@@ -32,6 +32,8 @@ class TaskListContract {
 
         void getTasksWithDate();
 
+        void getTasksWithDate(long date);
+
         void subscribe(View v);
 
         void unsubscribe(View v);

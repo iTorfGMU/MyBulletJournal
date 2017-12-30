@@ -5,4 +5,16 @@ package com.torfin.mybulletjournal.monthlylog;
  */
 
 public class MonthlyLogContract {
+
+    public interface View {
+        void showTaskListActivity(long selectedDate);
+    }
+
+    public interface Presenter {
+
+        void subscribe(View v);
+
+        void unsubscribe(View v);
+
+    }
 }
