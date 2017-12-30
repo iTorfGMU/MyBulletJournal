@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.torfin.mybulletjournal.dataobjects.Task;
+import com.torfin.mybulletjournal.utils.AnalyticUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +60,7 @@ public class TasksProvider {
         callbacks.add(callback);
         database = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        tasksDatabase = FirebaseDatabase.getInstance().getReference()
-                .child("tasks").child(user.getUid());
+        tasksDatabase = FirebaseDatabase.getInstance().getReference().child("tasks").child(user.getUid());
         localDatabase = TasksDatabase.getDatabaseInstance(context);
     }
 
@@ -152,6 +152,8 @@ public class TasksProvider {
     }
 
     private void updateDatabase(Task task) {
+        AnalyticUtils.sendAnalytics_TaskUpdated(task);
+
         String key = database.child("tasks").child(user.getUid()).push().getKey();
         Map<String, Object> taskValues = task.toMap();
 
@@ -162,6 +164,8 @@ public class TasksProvider {
     }
 
     public void addTask(Task task) {
+        AnalyticUtils.sendAnalytics_TaskAdded(task);
+
         tasks.put(task.uid, task);
         localDatabase.tasksDao().addTask(task);
         updateDatabase(task);
@@ -171,6 +175,9 @@ public class TasksProvider {
         if (tasks.containsKey(task.uid)) {
             tasks.remove(task);
         }
+
+        AnalyticUtils.sendAnalytics_TaskDeleted(task);
+
         localDatabase.tasksDao().deleteTask(task);
         String key = database.child("tasks").push().getKey();
 
@@ -182,7 +189,9 @@ public class TasksProvider {
 
     private void notifyCallbacks() {
         for (TaskAdded callback : callbacks) {
-            callback.taskAdded();
+            if (callback != null) {
+                callback.taskAdded();
+            }
         }
     }
 

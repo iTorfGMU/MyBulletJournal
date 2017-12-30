@@ -22,7 +22,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
         setContentView(R.layout.activity_splash_screen);
 
-        presenter = SplashScreenPresenter.newInstance();
+        presenter = SplashScreenPresenter.newInstance(this);
     }
 
     @Override

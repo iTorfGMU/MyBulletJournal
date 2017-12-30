@@ -66,6 +66,21 @@
                 android:value=".taskslist.TasksListActivity" />
         </activity>
 
+        <!--Widget Service & Provider-->
+        <receiver android:name=".widget.TasksWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.torfin.mybulletjournal.tasksWidget.DATA_FETCHED"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widgetinfo" />
+        </receiver>
+
+        <service
+            android:name=".widget.TasksWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

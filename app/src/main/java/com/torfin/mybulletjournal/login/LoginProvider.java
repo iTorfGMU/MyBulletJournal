@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.torfin.mybulletjournal.dataobjects.User;
+import com.torfin.mybulletjournal.utils.CrashReportingUtils;
 
 
 /**
@@ -79,6 +80,7 @@ public class LoginProvider {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            CrashReportingUtils.logError("createUserWithEmail:failure " + task.getException());
                             callback.createUserFailed();
                         }
                     }
@@ -97,24 +99,8 @@ public class LoginProvider {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            CrashReportingUtils.logError("signInWithEmail:failure " + task.getException());
                             callback.loginFailed();
-                        }
-                    }
-                });
-    }
-
-    //TODO 12/25/17: do i need this?
-    void validateEmail(Activity activity) {
-        final FirebaseUser user = auth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            callback.validationSuccessful();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            callback.validationFailed();
                         }
                     }
                 });

@@ -1,10 +1,12 @@
 package com.torfin.mybulletjournal.splashscreen;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.torfin.mybulletjournal.utils.AnalyticUtils;
 
 /**
  * Created by torftorf1 on 12/25/17.
@@ -14,12 +16,12 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
 
     private SplashScreenContract.View view;
 
-    static SplashScreenPresenter newInstance() {
-        return new SplashScreenPresenter();
+    static SplashScreenPresenter newInstance(Context c) {
+        return new SplashScreenPresenter(c);
     }
 
-    private SplashScreenPresenter() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    private SplashScreenPresenter(Context c) {
+        AnalyticUtils.init(c);
     }
 
     @Override

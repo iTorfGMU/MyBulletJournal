@@ -98,5 +98,6 @@
     <string name="title_activity_view_labels">View Labels</string>
     <string name="title_activity_future_log">Future Log</string>
     <string name="title_activity_monthly_log">Monthly Log</string>
+    <string name="empty_string">No Tasks for Today</string>
 
 </resources>
