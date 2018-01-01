@@ -19,6 +19,10 @@ public class TaskDetailsContract {
 
         void hideEditView();
 
+        void setupDeleteTaskViews();
+
+        void hideDeleteTask();
+
         void updateStatus(Task updatedTask);
 
         void onError(@StringRes int resId);
@@ -28,6 +32,8 @@ public class TaskDetailsContract {
         void showMessage(String message);
 
         void showMessage(@StringRes int resId);
+
+        void dismiss();
     }
 
     public interface Presenter {
@@ -47,6 +53,10 @@ public class TaskDetailsContract {
         void onUpdateTaskSelected(String selectedStatus);
 
         void onDeleteTaskSelected();
+
+        void onUpdateTaskComplete();
+
+        void onDeleteTaskComplete();
     }
 
 }

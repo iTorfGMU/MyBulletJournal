@@ -156,6 +156,33 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
     }
 
     @Override
+    public void onGetTasksComplete(HashMap<String, Task> tasks) {
+        view.setAdapter(tasks);
+
+        view.hideLoading();
+
+        if (tasks == null || tasks.size() == 0) {
+            view.showNoTasks();
+        } else {
+            view.showTasksList(tasks);
+        }
+    }
+
+    @Override
+    public void onGetTasksByDateComplete(List<Task> list) {
+        HashMap<String, Task> map = provider.convertListToMap(list);
+
+        view.setAdapter(map);
+        view.hideLoading();
+
+        if (list == null || list.size() == 0) {
+            view.showNoTasks();
+        } else {
+            view.showTasksList(map);
+        }
+    }
+
+    @Override
     public void taskAdded() {
         updateTasksList();
     }
@@ -183,15 +210,7 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         protected void onPostExecute(HashMap<String, Task> tasks) {
             super.onPostExecute(tasks);
 
-            view.setAdapter(tasks);
-
-            view.hideLoading();
-
-            if (tasks == null || tasks.size() == 0) {
-                view.showNoTasks();
-            } else {
-                view.showTasksList(tasks);
-            }
+            onGetTasksComplete(tasks);
         }
     }
 
@@ -208,15 +227,7 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         protected void onPostExecute(List<Task> tasks) {
             super.onPostExecute(tasks);
 
-            view.setAdapter(provider.convertListToMap(tasks));
-
-            view.hideLoading();
-
-            if (tasks == null || tasks.size() == 0) {
-                view.showNoTasks();
-            } else {
-                view.showTasksList(provider.convertListToMap(tasks));
-            }
+            onGetTasksByDateComplete(tasks);
         }
     }
 

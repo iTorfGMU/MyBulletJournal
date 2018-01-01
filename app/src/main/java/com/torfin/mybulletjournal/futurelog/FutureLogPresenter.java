@@ -2,6 +2,7 @@ package com.torfin.mybulletjournal.futurelog;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.VisibleForTesting;
 
 import com.torfin.mybulletjournal.contentprovider.TasksProvider;
 import com.torfin.mybulletjournal.dataobjects.Task;
@@ -28,6 +29,8 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM yyyy", Locale.getDefault());
 
     private int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+
+    private List<Object> log;
 
     public static FutureLogPresenter newInstance(Context c) {
         return new FutureLogPresenter(c);
@@ -64,6 +67,35 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
     }
 
     @Override
+    public void onGetFutureTasksComplete(List<Task> list) {
+
+        Collections.sort(list, new Comparator<Task>(){
+            public int compare(Task o1, Task o2){
+                return DateUtils.getDate(o1.taskDate).compareTo(DateUtils.getDate(o2.taskDate));
+            }
+        });
+
+        List<Object> logList = new ArrayList<>();
+        logList.add(DateUtils.formatDate(Calendar.getInstance().getTimeInMillis(), dateFormat));
+
+        for (Task task : list) {
+            if (DateUtils.getMonth(task.taskDate) != currentMonth) {
+                currentMonth = DateUtils.getMonth(task.taskDate);
+
+                logList.add(DateUtils.formatDate(task.taskDate, dateFormat));
+                logList.add(task);
+            } else {
+                logList.add(task);
+            }
+        }
+
+        setLogObjects(logList);
+
+        view.hideLoading();
+        view.setRecyclerView(logList);
+    }
+
+    @Override
     public void taskAdded() {
 
     }
@@ -80,26 +112,21 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
         protected void onPostExecute(List<Task> list) {
             super.onPostExecute(list);
 
-            Collections.sort(list, new Comparator<Task>(){
-                public int compare(Task o1, Task o2){
-                    return DateUtils.getDate(o1.taskDate).compareTo(DateUtils.getDate(o2.taskDate));
-                }
-            });
-
-            List<Object> logList = new ArrayList<>();
-            logList.add(DateUtils.formatDate(Calendar.getInstance().getTimeInMillis(), dateFormat));
-
-            for (Task task : list) {
-                if (DateUtils.getMonth(task.taskDate) != currentMonth) {
-                    logList.add(DateUtils.formatDate(task.taskDate, dateFormat));
-                    logList.add(task);
-                } else {
-                    logList.add(task);
-                }
-            }
-
-            view.hideLoading();
-            view.setRecyclerView(logList);
+            onGetFutureTasksComplete(list);
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public FutureLogContract.View getView() {
+        return this.view;
+    }
+
+    private void setLogObjects(List<Object> list) {
+        this.log = list;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public List<Object> getLog() {
+        return this.log;
     }
 }

@@ -4,6 +4,7 @@ import com.torfin.mybulletjournal.dataobjects.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by torftorf1 on 12/25/17.
@@ -55,5 +56,9 @@ public class TaskListContract {
         String getDate(long date);
 
         String getTime(long date);
+
+        void onGetTasksComplete(HashMap<String, Task> tasks);
+
+        void onGetTasksByDateComplete(List<Task> list);
     }
 }

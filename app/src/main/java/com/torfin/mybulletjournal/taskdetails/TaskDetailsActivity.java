@@ -194,6 +194,16 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
     }
 
     @Override
+    public void setupDeleteTaskViews() {
+        deleteTaskButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideDeleteTask() {
+        deleteTaskButton.setVisibility(View.GONE);
+    }
+
+    @Override
     public void updateStatus(Task updatedTask) {
         selectedTask = updatedTask;
         taskStatusTextView.setText(updatedTask.taskType);
@@ -220,5 +230,10 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
     public void showMessage(@StringRes int resId) {
         View parentLayout = findViewById(android.R.id.content);
         Snackbar.make(parentLayout, resId, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void dismiss() {
+        finish();
     }
 }

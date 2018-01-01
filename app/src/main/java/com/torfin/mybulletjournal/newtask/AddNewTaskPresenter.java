@@ -3,6 +3,8 @@ package com.torfin.mybulletjournal.newtask;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -10,6 +12,7 @@ import android.widget.TimePicker;
 import com.torfin.mybulletjournal.contentprovider.TaskLabelProvider;
 import com.torfin.mybulletjournal.contentprovider.TasksProvider;
 import com.torfin.mybulletjournal.dataobjects.Task;
+import com.torfin.mybulletjournal.taskdetails.TaskDetailsContract;
 import com.torfin.mybulletjournal.utils.DateUtils;
 import com.torfin.mybulletjournal.utils.ProfileUtils;
 
@@ -22,7 +25,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, ProfileUtils.VerifyListener, TasksProvider.TaskAdded,
-        DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener, TaskLabelProvider.LabelsCallback{
+        DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener, TaskLabelProvider.LabelsCallback {
 
     private AddNewTaskContract.View view;
 
@@ -107,11 +110,9 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
         if (selectedDate != null) {
             date = selectedDate.getTime();
         }
-        // Creating a random UUID (Universally unique identifier).
-        UUID uuid = UUID.randomUUID();
-        String uuidString = uuid.toString();
 
-        Task task = new Task(uuidString, name, type, date, typeId, label);
+
+        Task task = new Task("", name, type, date, typeId, label);
         new AddTask().execute(task);
     }
 
@@ -147,6 +148,21 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
     @Override
     public void dismissTimePicker() {
         this.view.hideTimePicker();
+    }
+
+    @Override
+    public void onCreateTaskComplete() {
+        view.hideLoading();
+        view.showMessage("Task Successfully Added");
+        view.dismiss();
+    }
+
+    @Override
+    public void setDate() {
+        selectedDate = this.view.getSelectedDate();
+
+        this.view.hideDatePicker();
+        this.view.onDatePicked(DateUtils.formatDate(selectedDate, dateFormat));
     }
 
     @Override
@@ -205,9 +221,13 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            view.hideLoading();
-            view.showMessage("Task Successfully Added");
-            view.dismiss();
+            onCreateTaskComplete();
         }
+    }
+
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public AddNewTaskContract.View getView() {
+        return this.view;
     }
 }

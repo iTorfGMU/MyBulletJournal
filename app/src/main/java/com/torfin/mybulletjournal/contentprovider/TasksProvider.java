@@ -104,8 +104,8 @@ public class TasksProvider {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Task addedTask = dataSnapshot.getValue(Task.class);
                     Log.d(TAG + " CHILD ADDED", addedTask.taskName);
-                    tasks.put(addedTask.uid, addedTask);
 
+                    tasks.put(addedTask.uid, addedTask);
                     new UpdateLocalDatabase().execute(addedTask);
                 }
 
@@ -121,9 +121,6 @@ public class TasksProvider {
                     Task removedTask = dataSnapshot.getValue(Task.class);
                     Log.d(TAG + " CHILD REMOVED", removedTask.taskName);
 
-                    if (tasks.containsKey(removedTask.uid)) {
-                        tasks.remove(removedTask);
-                    }
                 }
 
                 @Override
@@ -150,8 +147,8 @@ public class TasksProvider {
     }
 
     public void updateLocalTaskDatabase(Task task) {
-        localDatabase.tasksDao().updateTask(task);
         updateDatabase(task);
+        localDatabase.tasksDao().updateTask(task);
     }
 
     public void updateLocalDatabase(Task task) {
@@ -180,39 +177,38 @@ public class TasksProvider {
     }
 
     private void updateDatabase(Task task) {
-        AnalyticUtils.sendAnalytics_TaskUpdated(task);
 
         String key = database.child("tasks").child(user.getUid()).push().getKey();
+        task.uid = key;
         Map<String, Object> taskValues = task.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/tasks/" + user.getUid() + "/" + key, taskValues);
 
         database.updateChildren(childUpdates);
+
+        AnalyticUtils.sendAnalytics_TaskUpdated(task);
     }
 
     public void addTask(Task task) {
         AnalyticUtils.sendAnalytics_TaskAdded(task);
 
+        updateDatabase(task);
+
         tasks.put(task.uid, task);
         localDatabase.tasksDao().addTask(task);
-        updateDatabase(task);
     }
 
     public void deleteTask(Task task) {
         if (tasks.containsKey(task.uid)) {
-            tasks.remove(task);
+            tasks.remove(task.uid);
         }
 
         AnalyticUtils.sendAnalytics_TaskDeleted(task);
 
         localDatabase.tasksDao().deleteTask(task);
-        String key = database.child("tasks").push().getKey();
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/tasks/" + user.getUid() + "/" + key, null);
-
-        database.updateChildren(childUpdates);
+        tasksDatabase.child(task.uid).removeValue();
     }
 
     private void notifyCallbacks() {

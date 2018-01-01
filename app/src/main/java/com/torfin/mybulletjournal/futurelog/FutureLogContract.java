@@ -1,5 +1,7 @@
 package com.torfin.mybulletjournal.futurelog;
 
+import com.torfin.mybulletjournal.dataobjects.Task;
+
 import java.util.List;
 
 /**
@@ -25,6 +27,8 @@ public class FutureLogContract {
         void unsubscribe(View v);
 
         void configureRecyclerView();
+
+        void onGetFutureTasksComplete(List<Task> list);
 
     }
 

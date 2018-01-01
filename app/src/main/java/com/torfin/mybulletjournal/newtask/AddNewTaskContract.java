@@ -4,9 +4,10 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.widget.ArrayAdapter;
 
+import java.util.Date;
 import java.util.List;
 
-class AddNewTaskContract {
+public class AddNewTaskContract {
 
     public interface Presenter<V extends View> {
         void checkToken();
@@ -30,6 +31,10 @@ class AddNewTaskContract {
         void dismissDatePicker();
 
         void dismissTimePicker();
+
+        void onCreateTaskComplete();
+
+        void setDate();
     }
 
     public interface View {
@@ -57,6 +62,8 @@ class AddNewTaskContract {
         void showTimePicker();
 
         void hideTimePicker();
+
+        Date getSelectedDate();
 
         void onDatePicked(String date);
 

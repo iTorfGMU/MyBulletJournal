@@ -29,6 +29,9 @@ import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.dataobjects.TaskTypeIds;
 import com.torfin.mybulletjournal.login.LoginActivity;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -225,6 +228,13 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
     }
 
     @Override
+    public Date getSelectedDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+        return calendar.getTime();
+    }
+
+    @Override
     public void onDatePicked(String date) {
         taskDateTextView.setText(date);
 
@@ -257,6 +267,9 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
                 presenter.handleTimePicker();
                 break;
             case R.id.date_picker_container:
+                if (Build.VERSION.SDK_INT < 26) {
+                    presenter.setDate();
+                }
                 presenter.dismissDatePicker();
                 break;
             case R.id.time_picker_container:

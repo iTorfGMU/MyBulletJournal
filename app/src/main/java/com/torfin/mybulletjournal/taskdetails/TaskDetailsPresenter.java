@@ -2,6 +2,7 @@ package com.torfin.mybulletjournal.taskdetails;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.VisibleForTesting;
 
 import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.contentprovider.TasksProvider;
@@ -28,6 +29,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     private SimpleDateFormat dateFormat;
 
+    private boolean canEdit;
 
     public static TaskDetailsPresenter newInstance(Context c) {
         return new TaskDetailsPresenter(c);
@@ -99,11 +101,16 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     @Override
     public void onEditSelected(Task task) {
-        if (TaskTypeIds.isATask(task.taskTypeId)) {
-            this.view.setupEditView();
-        } else {
-            this.view.onError("Our apologies. This task is not allowed to be edited at the moment.");
-        }
+         if (task == null) {
+             canEdit = false;
+             this.view.onError("Oh no! Looks like something went wrong with attempting to edit this. Please try again later.");
+         } else if (!TaskTypeIds.isATask(task.taskTypeId)) {
+             canEdit = false;
+             this.view.setupDeleteTaskViews();
+         } else {
+             canEdit = true;
+             this.view.setupEditView();
+         }
     }
 
     @Override
@@ -116,6 +123,37 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
     public void onDeleteTaskSelected() {
         this.view.showLoading();
         new DeleteTask().execute();
+    }
+
+    @Override
+    public void onUpdateTaskComplete() {
+        if (selectedTask != null) {
+            this.view.updateStatus(selectedTask);
+            this.view.hideEditView();
+        } else {
+            this.view.onError("Oh no! Looks like something went wrong with updating the selected task. Please try again later!");
+        }
+
+        this.view.hideLoading();
+
+    }
+
+    @Override
+    public void onDeleteTaskComplete() {
+
+        this.view.hideLoading();
+
+        if (selectedTask == null) {
+            this.view.onError("Oh no! Looks like something went wrong with updating the selected task. Please try again later!");
+        } else {
+            if (canEdit) {
+                this.view.hideEditView();
+            } else {
+                this.view.hideDeleteTask();
+                this.view.dismiss();
+            }
+        }
+
     }
 
     @Override
@@ -141,9 +179,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            view.updateStatus(selectedTask);
-            view.hideEditView();
-            view.hideLoading();
+            onUpdateTaskComplete();
         }
     }
 
@@ -159,8 +195,23 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            view.hideEditView();
-            view.hideLoading();
+            onDeleteTaskComplete();
         }
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public TaskDetailsContract.View getView() {
+        return this.view;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSelectedTask(Task task) {
+        this.selectedTask = task;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setCanEdit(boolean b) {
+        this.canEdit = b;
+    }
+
 }

@@ -17,8 +17,10 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertNotNull;
@@ -71,35 +73,6 @@ public class TaskListPresenterTest {
     }
 
     @Test
-    public void test_getTasks_loading() {
-
-        HashMap<String, Task> tasks = new HashMap<>();
-
-        UUID uuid = UUID.randomUUID();
-        String uuidString = uuid.toString();
-
-        Task test = new Task(
-                uuidString,
-                "test",
-                "NOTE",
-                Calendar.getInstance().getTimeInMillis(),
-                TaskTypeIds.TASK_TYPE_NOTE,
-                "label"
-        );
-
-        tasks.put(test.uid, test);
-
-        presenter.subscribe(view);
-
-        when(provider.getTasks()).thenReturn(tasks);
-
-
-
-        presenter.getTasks();
-        verify(view).showLoading();
-    }
-
-    @Test
     public void test_getTasks_DoneLoading() {
 
         HashMap<String, Task> tasks = new HashMap<>();
@@ -120,9 +93,8 @@ public class TaskListPresenterTest {
 
         presenter.subscribe(view);
 
-        when(provider.getTasks()).thenReturn(tasks);
+        presenter.onGetTasksComplete(tasks);
 
-        presenter.getTasks();
         verify(view).setAdapter(tasks);
         verify(view).hideLoading();
         verify(view).showTasksList(tasks);
@@ -135,10 +107,74 @@ public class TaskListPresenterTest {
 
         presenter.subscribe(view);
 
-        when(provider.getTasks()).thenReturn(tasks);
+        presenter.onGetTasksComplete(tasks);
 
-        presenter.getTasks();
         verify(view).setAdapter(tasks);
+        verify(view).hideLoading();
+        verify(view).showNoTasks();
+    }
+
+    @Test
+    public void test_getTasksByDate_DoneLoading() {
+
+        List<Task> tasks = new ArrayList<>(2);
+
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString();
+
+        Task testOne = new Task(
+                uuidString,
+                "test1",
+                "NOTE",
+                Calendar.getInstance().getTimeInMillis(),
+                TaskTypeIds.TASK_TYPE_NOTE,
+                "label"
+        );
+
+        uuid = UUID.randomUUID();
+        uuidString = uuid.toString();
+
+        Task testTwo = new Task(
+                uuidString,
+                "test2",
+                "NOTE",
+                Calendar.getInstance().getTimeInMillis(),
+                TaskTypeIds.TASK_TYPE_NOTE,
+                "label"
+        );
+
+        tasks.add(testOne);
+        tasks.add(testTwo);
+
+        HashMap<String, Task> tasksMap = new HashMap<>(2);
+
+        tasksMap.put(testOne.uid, testOne);
+        tasksMap.put(testTwo.uid, testTwo);
+
+        presenter.subscribe(view);
+
+        when(provider.convertListToMap(tasks)).thenReturn(tasksMap);
+
+        presenter.onGetTasksByDateComplete(tasks);
+
+        verify(view).setAdapter(tasksMap);
+        verify(view).hideLoading();
+        verify(view).showTasksList(tasksMap);
+    }
+
+    @Test
+    public void test_getTasksByDate_DoneLoading_NoTasks() {
+
+        HashMap<String, Task> taskMap = new HashMap<>(2);
+        List<Task> taskList = new ArrayList<>(2);
+
+        presenter.subscribe(view);
+
+        when(provider.convertListToMap(taskList)).thenReturn(taskMap);
+
+        presenter.onGetTasksByDateComplete(taskList);
+
+        verify(view).setAdapter(taskMap);
         verify(view).hideLoading();
         verify(view).showNoTasks();
     }

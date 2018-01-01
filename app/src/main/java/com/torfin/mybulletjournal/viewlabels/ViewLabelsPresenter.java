@@ -1,6 +1,7 @@
 package com.torfin.mybulletjournal.viewlabels;
 
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 
 import com.torfin.mybulletjournal.contentprovider.TaskLabelProvider;
 
@@ -52,6 +53,11 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
 
     @Override
     public void labelsReturned() {
+        getUpdatedLabelList();
+    }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public ViewLabelsContract.View getView() {
+        return this.view;
     }
 }
