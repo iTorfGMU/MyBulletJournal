@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +38,8 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TasksListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TaskListContract.View, View.OnClickListener {
+public class TasksListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        TaskListContract.View, View.OnClickListener {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -59,6 +61,9 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
 
     @BindView(R.id.next_date_button)
     ImageButton nextDateButton;
+
+    @BindView(R.id.tasks_refresh_layout)
+    SwipeRefreshLayout refreshLayout;
 
     @BindView(R.id.tasks_recycler_view)
     RecyclerView tasksRecyclerView;
@@ -136,6 +141,8 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
         if (dateInMilliseconds != 0) {
             showDateTasks = true;
         }
+
+        refreshLayout.setOnRefreshListener(presenter);
     }
 
     @Override
@@ -242,9 +249,6 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
     public void showTasksList(HashMap<String, Task> tasks) {
         noTasksTextView.setVisibility(View.GONE);
         tasksRecyclerView.setVisibility(View.VISIBLE);
-
-        adapter = new TasksRecyclerViewAdapter(presenter.getListOfTasks(tasks), presenter);
-        tasksRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -255,6 +259,22 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void setDate(String date) {
         currentDateTextView.setText(date);
+    }
+
+    @Override
+    public void refreshAdapter(boolean setRefreshing) {
+        refreshLayout.setRefreshing(setRefreshing);
+    }
+
+    @Override
+    public void updateList() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setAdapter(HashMap<String, Task> tasks) {
+        adapter = new TasksRecyclerViewAdapter(presenter.getListOfTasks(tasks), presenter);
+        tasksRecyclerView.setAdapter(adapter);
     }
 
     @Override

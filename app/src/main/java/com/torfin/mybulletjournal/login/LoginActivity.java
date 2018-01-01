@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View, View.OnClickListener {
 
-    @BindView(R.id.username_edittext)
+    @BindView(R.id.email_edittext)
     EditText username;
 
     @BindView(R.id.password_edittext)
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         ButterKnife.bind(this);
 
-        presenter = LoginPresenter.newInstance(this);
+        presenter = LoginPresenter.newInstance();
 
         createUserButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
@@ -151,10 +151,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         switch(id) {
             case R.id.create_user:
-                presenter.onCreateAccountClicked(username.getText().toString(), password.getText().toString());
+                presenter.onCreateAccountClicked(username.getText().toString(), password.getText().toString(), this);
                 break;
             case R.id.login_user_button:
-                presenter.onLoginClicked(username.getText().toString(), password.getText().toString());
+                presenter.onLoginClicked(username.getText().toString(), password.getText().toString(), this);
                 break;
             default:
                 break;

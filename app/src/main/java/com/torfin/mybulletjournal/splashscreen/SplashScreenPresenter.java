@@ -2,6 +2,7 @@ package com.torfin.mybulletjournal.splashscreen;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,7 +17,9 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
 
     private SplashScreenContract.View view;
 
-    static SplashScreenPresenter newInstance(Context c) {
+    private FirebaseUser user;
+
+    public static SplashScreenPresenter newInstance(Context c) {
         return new SplashScreenPresenter(c);
     }
 
@@ -26,7 +29,6 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
 
     @Override
     public void determineNextPage() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             this.view.userSignIn();
         } else {
@@ -44,5 +46,23 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
         if (v == this.view) {
             this.view = null;
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public SplashScreenContract.View getView() {
+        return this.view;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setUser(FirebaseUser mockUser) {
+        this.user = mockUser;
+    }
+
+    private FirebaseUser getUser() {
+        if (user == null) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+        }
+
+        return user;
     }
 }

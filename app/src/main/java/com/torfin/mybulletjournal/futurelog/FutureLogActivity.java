@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.torfin.mybulletjournal.R;
@@ -25,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by torftorf1 on 12/25/17.
+ * Created by Ila on 12/25/17.
  */
 
 public class FutureLogActivity extends AppCompatActivity implements FutureLogContract.View{
@@ -38,6 +39,9 @@ public class FutureLogActivity extends AppCompatActivity implements FutureLogCon
 
     @BindView(R.id.future_log_progress_bar_container)
     LinearLayout loadingView;
+
+    @BindView(R.id.no_future_tasks_textview)
+    TextView noFutureTasksView;
 
     private FutureLogRecyclerAdapter adapter;
 
@@ -122,5 +126,11 @@ public class FutureLogActivity extends AppCompatActivity implements FutureLogCon
     public void setRecyclerView(List<Object> list) {
         adapter = new FutureLogRecyclerAdapter(list);
         recyclerView.setAdapter(adapter);
+
+        if (list == null || list.size() == 0) {
+            noFutureTasksView.setVisibility(View.VISIBLE);
+        } else {
+            noFutureTasksView.setVisibility(View.GONE);
+        }
     }
 }

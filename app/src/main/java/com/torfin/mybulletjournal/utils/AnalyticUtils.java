@@ -15,39 +15,45 @@ public class AnalyticUtils {
     private static FirebaseAnalytics firebaseAnalytics;
 
     public static void init(Context context) {
-        if (firebaseAnalytics == null) {
+        if (firebaseAnalytics == null && context != null && context.getApplicationContext() != null) {
             firebaseAnalytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
         }
     }
 
     public static void sendAnalytics_TaskAdded(Task task) {
 
-        Bundle bundle = new Bundle();
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
 
-        bundle.putString(FirebaseAnalytics.Param.SOURCE, "TASK ADDED");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, task.uid);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, task.taskName);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "tasks");
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            bundle.putString(FirebaseAnalytics.Param.SOURCE, "TASK ADDED");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, task.uid);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, task.taskName);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "tasks");
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }
     }
 
     public static void sendAnalytics_TaskDeleted(Task task) {
-        Bundle bundle = new Bundle();
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
 
-        bundle.putString(FirebaseAnalytics.Param.SOURCE, "TASK DELETED");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, task.uid);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, task.taskName);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "tasks");
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            bundle.putString(FirebaseAnalytics.Param.SOURCE, "TASK DELETED");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, task.uid);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, task.taskName);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "tasks");
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }
     }
 
     public static void sendAnalytics_TaskUpdated(Task task) {
-        Bundle bundle = new Bundle();
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
 
-        bundle.putString(FirebaseAnalytics.Param.SOURCE, "TASK UPDATE");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, task.uid);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, task.taskName);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "tasks");
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            bundle.putString(FirebaseAnalytics.Param.SOURCE, "TASK UPDATE");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, task.uid);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, task.taskName);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "tasks");
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }
     }
 }

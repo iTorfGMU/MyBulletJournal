@@ -8,6 +8,8 @@ import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.login.LoginActivity;
 import com.torfin.mybulletjournal.taskslist.TasksListActivity;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by torftorf1 on 12/25/17.
  */
@@ -21,6 +23,8 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_splash_screen);
+
+        ButterKnife.bind(this);
 
         presenter = SplashScreenPresenter.newInstance(this);
     }

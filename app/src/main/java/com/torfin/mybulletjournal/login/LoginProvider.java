@@ -2,6 +2,7 @@ package com.torfin.mybulletjournal.login;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -62,11 +63,15 @@ public class LoginProvider {
         return instance;
     }
 
+    public static void setMockInstance(LoginProvider mockInstance) {
+        instance = mockInstance;
+    }
+
     public FirebaseUser getCurrentUser() {
         return auth.getCurrentUser();
     }
 
-    void createNewUser(final String email, final String password, Activity activity) {
+    public boolean createNewUser(final String email, final String password, Activity activity) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -85,9 +90,11 @@ public class LoginProvider {
                         }
                     }
                 });
+
+        return true;
     }
 
-    void loginUser(String email, String password, Activity activity) {
+    public boolean loginUser(String email, String password, Activity activity) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -104,11 +111,18 @@ public class LoginProvider {
                         }
                     }
                 });
+
+        return true;
     }
 
     private void createNewUser(String email, String password, FirebaseUser user) {
         User localUser = new User(email, password);
         this.database.child("users").child(user.getUid()).setValue(localUser);
+    }
+
+    @VisibleForTesting
+    public LoginCallback getCallback() {
+        return callback;
     }
 
 }

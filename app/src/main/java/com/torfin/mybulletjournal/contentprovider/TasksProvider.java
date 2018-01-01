@@ -1,6 +1,8 @@
 package com.torfin.mybulletjournal.contentprovider;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,8 +62,22 @@ public class TasksProvider {
         callbacks.add(callback);
         database = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        tasksDatabase = FirebaseDatabase.getInstance().getReference().child("tasks").child(user.getUid());
+
+        if (user != null) {
+            tasksDatabase = FirebaseDatabase.getInstance().getReference().child("tasks").child(user.getUid());
+        }
+
         localDatabase = TasksDatabase.getDatabaseInstance(context);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public static void setMockInstance(TasksProvider mockInstance) {
+        instance = mockInstance;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public static void setUser(FirebaseUser mockUser) {
+        user = mockUser;
     }
 
     public HashMap<String, Task> getTasks() {
@@ -80,42 +96,49 @@ public class TasksProvider {
 
     private void getTasksFromDatabase() {
 
-        tasksDatabase.orderByChild("taskDate").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Task addedTask = dataSnapshot.getValue(Task.class);
-                Log.d(TAG + " CHILD ADDED", addedTask.taskName);
-                tasks.put(addedTask.uid, addedTask);
-            }
+        if (tasksDatabase == null && user != null) {
+            tasksDatabase = FirebaseDatabase.getInstance().getReference().child("tasks").child(user.getUid());
+        } else if (tasksDatabase != null) {
+            tasksDatabase.orderByChild("taskDate").addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Task addedTask = dataSnapshot.getValue(Task.class);
+                    Log.d(TAG + " CHILD ADDED", addedTask.taskName);
+                    tasks.put(addedTask.uid, addedTask);
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Task changedTask = dataSnapshot.getValue(Task.class);
-                Log.d(TAG + " CHILD CHANGED", changedTask.taskName);
-                tasks.put(changedTask.uid, changedTask);
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Task removedTask = dataSnapshot.getValue(Task.class);
-                Log.d(TAG + " CHILD REMOVED", removedTask.taskName);
-
-                if (tasks.containsKey(removedTask.uid)) {
-                    tasks.remove(removedTask);
+                    new UpdateLocalDatabase().execute(addedTask);
                 }
-            }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Task movedTask = dataSnapshot.getValue(Task.class);
-                Log.d(TAG + " CHILD MOVED", movedTask.taskName);
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    Task changedTask = dataSnapshot.getValue(Task.class);
+                    Log.d(TAG + " CHILD CHANGED", changedTask.taskName);
+                    tasks.put(changedTask.uid, changedTask);
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG + " CANCELLED", databaseError.getDetails());
-            }
-        });
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Task removedTask = dataSnapshot.getValue(Task.class);
+                    Log.d(TAG + " CHILD REMOVED", removedTask.taskName);
+
+                    if (tasks.containsKey(removedTask.uid)) {
+                        tasks.remove(removedTask);
+                    }
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    Task movedTask = dataSnapshot.getValue(Task.class);
+                    Log.d(TAG + " CHILD MOVED", movedTask.taskName);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d(TAG + " CANCELLED", databaseError.getDetails());
+                }
+            });
+        }
+
     }
 
     public List<Task> getTasksWithDate(long dateOne, long dateTwo) {
@@ -126,10 +149,15 @@ public class TasksProvider {
         return localDatabase.tasksDao().getFutureTasks(startDate);
     }
 
-    public void updateTasksDatabase(Task task) {
+    public void updateLocalTaskDatabase(Task task) {
         localDatabase.tasksDao().updateTask(task);
         updateDatabase(task);
     }
+
+    public void updateLocalDatabase(Task task) {
+        localDatabase.tasksDao().updateTask(task);
+    }
+
 
     public HashMap<String, Task> convertListToMap(List<Task> taskList) {
         HashMap<String, Task> taskMap = new HashMap<>(taskList.size());
@@ -197,6 +225,23 @@ public class TasksProvider {
 
     public interface TaskAdded {
         void taskAdded();
+    }
+
+    private class UpdateLocalDatabase extends AsyncTask<Task, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Task... params) {
+            Task task = params[0];
+
+            updateLocalDatabase(task);
+
+            return null;
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setTasks(HashMap<String, Task> list) {
+        tasks = list;
     }
 
 }

@@ -54,6 +54,11 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
     @Override
     public Task getTask(String id) {
         selectedTask = provider.getTasks().get(id);
+
+        if (selectedTask == null) {
+            this.view.onError("Error loading task. Please try again later.");
+        }
+
         return selectedTask;
     }
 
@@ -127,7 +132,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
             selectedTask.taskType = selectedType;
             selectedTask.taskTypeId = TaskTypeIds.getTaskTypeId(selectedType, context);
 
-            provider.updateTasksDatabase(selectedTask);
+            provider.updateLocalTaskDatabase(selectedTask);
 
             return null;
         }

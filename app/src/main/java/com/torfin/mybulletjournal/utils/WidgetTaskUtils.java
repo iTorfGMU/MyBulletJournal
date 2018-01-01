@@ -1,5 +1,7 @@
 package com.torfin.mybulletjournal.utils;
 
+import android.support.annotation.NonNull;
+
 import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.dataobjects.Task;
 import com.torfin.mybulletjournal.dataobjects.TaskTypeIds;
@@ -14,7 +16,7 @@ public class WidgetTaskUtils {
 
     private static List<Task> tasks;
 
-    public static void setTasks(List<Task> list) {
+    public static void setTasks(@NonNull List<Task> list) {
         tasks = list;
     }
 
@@ -23,7 +25,7 @@ public class WidgetTaskUtils {
     }
 
 
-    public static int getTaskImage(Task task) {
+    public static int getTaskImage(@NonNull Task task) {
         switch (task.taskTypeId) {
             case TaskTypeIds.TASK_TYPE_EVENT:
                 return R.drawable.ic_event;

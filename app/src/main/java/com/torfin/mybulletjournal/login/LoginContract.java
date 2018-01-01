@@ -1,5 +1,6 @@
 package com.torfin.mybulletjournal.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.StringRes;
 
@@ -15,9 +16,11 @@ public class LoginContract {
 
         void unsubscribe(View v);
 
-        void onCreateAccountClicked(String email, String password);
+        void onCreateAccountClicked(String email, String password, Activity activity);
 
-        void onLoginClicked(String email, String password);
+        void onLoginClicked(String email, String password, Activity activity);
+
+        boolean validateForm(String str1, String str2);
     }
 
     public interface View {

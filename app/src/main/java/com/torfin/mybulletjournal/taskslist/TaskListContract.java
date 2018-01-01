@@ -9,9 +9,9 @@ import java.util.HashMap;
  * Created by torftorf1 on 12/25/17.
  */
 
-class TaskListContract {
+public class TaskListContract {
 
-    interface View {
+    public interface View {
 
         void showLoading();
 
@@ -24,9 +24,15 @@ class TaskListContract {
         void updateTasks();
 
         void setDate(String date);
+
+        void refreshAdapter(boolean setRefreshing);
+
+        void updateList();
+
+        void setAdapter(HashMap<String, Task> tasks);
     }
 
-    interface Presenter {
+    public interface Presenter {
 
         void getTasks();
 

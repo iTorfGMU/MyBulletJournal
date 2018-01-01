@@ -38,7 +38,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     private Context context;
 
-    static AddNewTaskPresenter newInstance(Context c) {
+    public static AddNewTaskPresenter newInstance(Context c) {
         return new AddNewTaskPresenter(c);
     }
 

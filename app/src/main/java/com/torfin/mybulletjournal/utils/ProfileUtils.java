@@ -1,6 +1,7 @@
 package com.torfin.mybulletjournal.utils;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +47,11 @@ public class ProfileUtils {
         void successful();
 
         void error();
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public static void setUser(FirebaseUser u) {
+        user = u;
     }
 
 }

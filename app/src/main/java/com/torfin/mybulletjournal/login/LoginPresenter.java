@@ -1,6 +1,8 @@
 package com.torfin.mybulletjournal.login;
 
 import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 
 /**
  * Created by torftorf1 on 12/4/17.
@@ -8,18 +10,15 @@ import android.app.Activity;
 
 public class LoginPresenter implements LoginContract.Presenter<LoginContract.View>, LoginProvider.LoginCallback {
 
-    private Activity activity;
-
     private LoginProvider provider;
 
     private LoginContract.View view;
 
-    static LoginPresenter newInstance(Activity activity) {
-        return new LoginPresenter(activity);
+    public static LoginPresenter newInstance() {
+        return new LoginPresenter();
     }
 
-    private LoginPresenter(Activity activity) {
-        this.activity = activity;
+    private LoginPresenter() {
         this.provider = LoginProvider.getInstance(this);
     }
 
@@ -34,15 +33,42 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     }
 
     @Override
-    public void onCreateAccountClicked(String email, String password) {
+    public void onCreateAccountClicked(String email, String password, Activity activity) {
+        if (!validateForm(email, password)) {
+            this.view.showMessage("Some required information is missing.");
+            return;
+        }
+
         this.view.showLoading();
-        this.provider.createNewUser(email, password, this.activity);
+        this.provider.createNewUser(email, password, activity);
     }
 
     @Override
-    public void onLoginClicked(String email, String password) {
+    public void onLoginClicked(String email, String password, Activity activity) {
+        if (!validateForm(email, password)) {
+            this.view.showMessage("Some required information is missing.");
+            return;
+        }
+
         this.view.showLoading();
-        this.provider.loginUser(email, password, this.activity);
+        this.provider.loginUser(email, password, activity);
+    }
+
+    @Override
+    public boolean validateForm(String str1, String str2) {
+
+        boolean formValid = true;
+
+        if (str1 == null || str1.length() == 0) {
+            formValid = false;
+        }
+
+        if (str2 == null || str2.length() == 0) {
+            formValid = false;
+        }
+
+        return formValid;
+
     }
 
     //Provider Callback Methods
@@ -72,5 +98,15 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     @Override
     public void validationFailed() {
         this.view.hideLoading();
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public LoginContract.View getView() {
+        return this.view;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public LoginProvider getProvider() {
+        return this.provider;
     }
 }

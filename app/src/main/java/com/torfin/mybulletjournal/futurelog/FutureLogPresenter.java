@@ -98,8 +98,8 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
                 }
             }
 
-            view.setRecyclerView(logList);
             view.hideLoading();
+            view.setRecyclerView(logList);
         }
     }
 }

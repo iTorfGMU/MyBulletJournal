@@ -2,6 +2,8 @@ package com.torfin.mybulletjournal.taskslist;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.VisibleForTesting;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.torfin.mybulletjournal.contentprovider.TasksProvider;
@@ -20,7 +22,7 @@ import java.util.Locale;
  * Created by torftorf1 on 12/25/17.
  */
 
-public class TaskListPresenter implements TaskListContract.Presenter, TasksProvider.TaskAdded {
+public class TaskListPresenter implements TaskListContract.Presenter, TasksProvider.TaskAdded, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = TaskListPresenter.class.getSimpleName();
 
@@ -36,7 +38,9 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     private int numOfDaysDifference = 0;
 
-    static TaskListPresenter newInstance(Context context) {
+    private boolean allTasks;
+
+    public static TaskListPresenter newInstance(Context context) {
         return new TaskListPresenter(context);
     }
 
@@ -49,11 +53,15 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void getTasks() {
+        allTasks = true;
+        this.view.showLoading();
         new RetrieveTasks().execute();
     }
 
     @Override
     public void getTasksWithDate() {
+        allTasks = false;
+
         this.view.showLoading();
 
         Calendar calendar = Calendar.getInstance();
@@ -152,7 +160,19 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         updateTasksList();
     }
 
-    private class RetrieveTasks extends AsyncTask<Void, Void, HashMap<String, Task>> {
+    @Override
+    public void onRefresh() {
+        this.view.refreshAdapter(false);
+        this.view.showLoading();
+
+        if (allTasks) {
+            getTasks();
+        } else {
+            getTasksWithDate();
+        }
+    }
+
+    public class RetrieveTasks extends AsyncTask<Void, Void, HashMap<String, Task>> {
 
         @Override
         protected HashMap<String, Task> doInBackground(Void... params) {
@@ -162,6 +182,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         @Override
         protected void onPostExecute(HashMap<String, Task> tasks) {
             super.onPostExecute(tasks);
+
+            view.setAdapter(tasks);
 
             view.hideLoading();
 
@@ -173,7 +195,7 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         }
     }
 
-    private class RetrieveTasksWithDate extends AsyncTask<Long, Void, List<Task>> {
+    public class RetrieveTasksWithDate extends AsyncTask<Long, Void, List<Task>> {
 
         @Override
         protected List<Task> doInBackground(Long... params) {
@@ -186,6 +208,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         protected void onPostExecute(List<Task> tasks) {
             super.onPostExecute(tasks);
 
+            view.setAdapter(provider.convertListToMap(tasks));
+
             view.hideLoading();
 
             if (tasks == null || tasks.size() == 0) {
@@ -195,4 +219,15 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
             }
         }
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public TasksProvider getProvider() {
+        return this.provider;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public TaskListContract.View getView() {
+        return this.view;
+    }
+
 }

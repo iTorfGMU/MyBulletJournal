@@ -1,6 +1,8 @@
 package com.torfin.mybulletjournal.utils;
 
 
+import android.support.annotation.NonNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,18 +16,18 @@ public class DateUtils {
 
     private static SimpleDateFormat defaultFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
 
-    public static long addDays(Date date, int days) {
+    public static long addDays(@NonNull Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, days); //minus number would decrement the days
         return cal.getTimeInMillis();
     }
 
-    public static String formatDate(Date date, SimpleDateFormat format) {
+    public static String formatDate(@NonNull Date date, @NonNull  SimpleDateFormat format) {
         return format.format(date);
     }
 
-    public static String formatDate(long date, SimpleDateFormat format) {
+    public static String formatDate(long date, @NonNull SimpleDateFormat format) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date);
 

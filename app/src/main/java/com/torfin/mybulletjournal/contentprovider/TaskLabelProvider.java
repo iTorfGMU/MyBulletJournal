@@ -43,6 +43,10 @@ public class TaskLabelProvider implements ChildEventListener {
         return instance;
     }
 
+    public static void setMockInstance(TaskLabelProvider mockInstance) {
+        instance = mockInstance;
+    }
+
     private TaskLabelProvider(LabelsCallback callback) {
         database = FirebaseDatabase.getInstance().getReference().child("labels");
         database.orderByKey().addChildEventListener(this);

@@ -94,11 +94,13 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
         updateTaskButton.setOnClickListener(this);
         deleteTaskButton.setOnClickListener(this);
 
-        taskNameTextView.setText(selectedTask.taskName);
-        taskStatusIcon.setImageResource(presenter.getTaskTypeResId(selectedTask.taskTypeId));
-        taskStatusTextView.setText(selectedTask.taskType);
-        taskDateTextView.setText(presenter.getTaskDate(selectedTask.taskDate));
-        taskLabelTextView.setText(selectedTask.taskLabel);
+        if (selectedTask != null) {
+            taskNameTextView.setText(selectedTask.taskName);
+            taskStatusIcon.setImageResource(presenter.getTaskTypeResId(selectedTask.taskTypeId));
+            taskStatusTextView.setText(selectedTask.taskType);
+            taskDateTextView.setText(presenter.getTaskDate(selectedTask.taskDate));
+            taskLabelTextView.setText(selectedTask.taskLabel);
+        }
     }
 
     @Override

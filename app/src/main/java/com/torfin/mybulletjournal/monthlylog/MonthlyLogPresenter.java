@@ -2,12 +2,14 @@ package com.torfin.mybulletjournal.monthlylog;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.widget.CalendarView;
 
 import com.torfin.mybulletjournal.taskslist.TasksListActivity;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by torftorf1 on 12/25/17.
@@ -68,5 +70,10 @@ public class MonthlyLogPresenter implements MonthlyLogContract.Presenter, Calend
     @Override
     public void onClick(View v) {
         this.view.showTaskListActivity(selectedDate);
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void setSelectedDate(long day) {
+        selectedDate = day;
     }
 }

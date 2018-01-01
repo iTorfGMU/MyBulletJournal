@@ -107,8 +107,6 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
             showMessage("It appears you are not connected to a network.");
         }
 
-        openActivityOnTokenExpire();
-
         ArrayAdapter<String> labelArrayAdapter = presenter.getLabelArrayAdapter();
         labelArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
