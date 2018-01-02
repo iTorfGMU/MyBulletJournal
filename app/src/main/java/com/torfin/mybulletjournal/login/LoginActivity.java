@@ -21,13 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by torftorf1 on 12/4/17.
+ * Created by Ila on 12/4/17.
  */
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View, View.OnClickListener {
 
     @BindView(R.id.email_edittext)
-    EditText username;
+    EditText email;
 
     @BindView(R.id.password_edittext)
     EditText password;
@@ -151,10 +151,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         switch(id) {
             case R.id.create_user:
-                presenter.onCreateAccountClicked(username.getText().toString(), password.getText().toString(), this);
+                presenter.onCreateAccountClicked(email.getText().toString(), password.getText().toString(), this);
                 break;
             case R.id.login_user_button:
-                presenter.onLoginClicked(username.getText().toString(), password.getText().toString(), this);
+                presenter.onLoginClicked(email.getText().toString(), password.getText().toString(), this);
                 break;
             default:
                 break;
