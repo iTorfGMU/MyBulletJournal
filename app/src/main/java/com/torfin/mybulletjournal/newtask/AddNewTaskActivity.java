@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -93,6 +94,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
         setSupportActionBar(toolbar);
 
         this.presenter = AddNewTaskPresenter.newInstance(this);
+        this.presenter.subscribe(this);
 
         taskDateTextView.setOnClickListener(this);
         taskSelectTimeTextView.setOnClickListener(this);
@@ -107,7 +109,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
         timePicker.setOnTimeChangedListener(presenter);
 
         if (!isNetworkConnected()) {
-            showMessage("It appears you are not connected to a network.");
+            showMessage(R.string.snackbar_no_connectivity_message);
         }
 
         ArrayAdapter<String> labelArrayAdapter = presenter.getLabelArrayAdapter();
@@ -115,12 +117,43 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
 
         taskLabelSpinner.setAdapter(labelArrayAdapter);
         taskLabelSpinner.setSelection(0);
+
+        if (savedInstanceState != null) {
+            int taskLabelPosition = presenter.getLabelPosition(savedInstanceState.getString(AddNewTaskPresenter.TASK_LABEL_KEY));
+            int taskType = savedInstanceState.getInt(AddNewTaskPresenter.TASK_TYPE_KEY);
+
+            if (taskLabelPosition != -1) {
+                taskLabelSpinner.setSelection(taskLabelPosition);
+            }
+
+            taskTypeSpinner.setSelection(taskType);
+
+            presenter.handleRotation(savedInstanceState.getString(AddNewTaskPresenter.TASK_NAME_KEY),
+                    savedInstanceState.getLong(AddNewTaskPresenter.TASK_DATE_KEY),
+                    savedInstanceState.getBoolean(AddNewTaskPresenter.TASK_TIME_KEY));
+        }
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        this.presenter.subscribe(this);
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        setOutstate(outState);
+
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        setOutstate(outState);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    private void setOutstate(Bundle outState) {
+        outState.putString(AddNewTaskPresenter.TASK_NAME_KEY, taskNameEditView.getText().toString());
+        outState.putString(AddNewTaskPresenter.TASK_LABEL_KEY, String.valueOf(taskLabelSpinner.getSelectedItem()));
+        outState.putInt(AddNewTaskPresenter.TASK_TYPE_KEY, taskTypeSpinner.getSelectedItemPosition());
+        outState.putLong(AddNewTaskPresenter.TASK_DATE_KEY, presenter.getDate());
+        outState.putBoolean(AddNewTaskPresenter.TASK_TIME_KEY, presenter.wasTimeSelected());
     }
 
     @Override
@@ -245,6 +278,16 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
     @Override
     public void onTimePicked(String date) {
         taskSelectTimeTextView.setText(date);
+    }
+
+    @Override
+    public void setTaskName(String name) {
+        taskNameEditView.setText(name);
+    }
+
+    @Override
+    public void setTaskLabel(int position) {
+        taskLabelSpinner.setSelection(position);
     }
 
     @Override

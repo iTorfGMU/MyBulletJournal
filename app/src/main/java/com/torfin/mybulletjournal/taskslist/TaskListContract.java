@@ -57,6 +57,10 @@ public class TaskListContract {
 
         String getTime(long date);
 
+        long getCurrentlyDisplayedDate();
+
+        boolean showAllTasks();
+
         void onGetTasksComplete(HashMap<String, Task> tasks);
 
         void onGetTasksByDateComplete(List<Task> list);

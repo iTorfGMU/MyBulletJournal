@@ -3,6 +3,7 @@ package com.torfin.mybulletjournal.taskslist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,14 +26,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.dataobjects.Task;
 import com.torfin.mybulletjournal.futurelog.FutureLogActivity;
-import com.torfin.mybulletjournal.futurelog.FutureLogPresenter;
 import com.torfin.mybulletjournal.login.LoginActivity;
 import com.torfin.mybulletjournal.monthlylog.MonthlyLogActivity;
 import com.torfin.mybulletjournal.newtask.AddNewTaskActivity;
 import com.torfin.mybulletjournal.taskslist.recyclerview.TasksRecyclerViewAdapter;
 import com.torfin.mybulletjournal.viewlabels.ViewLabelsActivity;
 
-import java.util.Calendar;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -143,11 +142,11 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
         }
 
         refreshLayout.setOnRefreshListener(presenter);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        if (savedInstanceState != null) {
+            showDateTasks = !savedInstanceState.getBoolean(TaskListPresenter.DISPLAY_ALL_TASKS, false);
+            dateInMilliseconds = savedInstanceState.getLong(TaskListPresenter.DISPLAY_DATE_KEY, 0);
+        }
 
         if (!showDateTasks) {
             currentDateTextView.setText(R.string.all_tasks_header);
@@ -155,6 +154,23 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
         } else {
             presenter.getTasksWithDate(dateInMilliseconds);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        setOutState(outState);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        setOutState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void setOutState(Bundle bundle) {
+        bundle.putBoolean(TaskListPresenter.DISPLAY_ALL_TASKS, presenter.showAllTasks());
+        bundle.putLong(TaskListPresenter.DISPLAY_DATE_KEY, presenter.getCurrentlyDisplayedDate());
     }
 
     @Override

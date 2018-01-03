@@ -138,6 +138,9 @@ class ListTasksViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.widget_list_row);
 
         remoteView.setImageViewResource(R.id.widget_task_icon, WidgetTaskUtils.getTaskImage(task));
+        remoteView.setContentDescription(R.id.widget_task_icon,
+                context.getString(R.string.task_details_status_icon_cd)
+                        + WidgetTaskUtils.getTaskImageContentDescription(task, context));
         remoteView.setTextViewText(R.id.widget_task_name, task.taskName);
 
         return remoteView;

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
+import com.torfin.mybulletjournal.R;
+
 /**
  * Created by torftorf1 on 12/4/17.
  */
@@ -35,7 +37,7 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     @Override
     public void onCreateAccountClicked(String email, String password, Activity activity) {
         if (!validateForm(email, password)) {
-            this.view.showMessage("Some required information is missing.");
+            this.view.showMessage(R.string.snackbar_login_missing_fields_message);
             return;
         }
 
@@ -46,7 +48,7 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     @Override
     public void onLoginClicked(String email, String password, Activity activity) {
         if (!validateForm(email, password)) {
-            this.view.showMessage("Some required information is missing.");
+            this.view.showMessage(R.string.snackbar_login_missing_fields_message);
             return;
         }
 
@@ -81,13 +83,13 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     @Override
     public void loginFailed() {
         this.view.hideLoading();
-        this.view.onError("Our apologies, login failed. Please try again later.");
+        this.view.onError(R.string.snackbar_login_failed_message);
     }
 
     @Override
     public void createUserFailed() {
         this.view.hideLoading();
-        this.view.onError("Our apologies, creating a new user failed. Please try again later.");
+        this.view.onError(R.string.snackbar_login_create_new_user_failed);
     }
 
     @Override

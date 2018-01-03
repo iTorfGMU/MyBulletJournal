@@ -80,7 +80,7 @@ public class MonthlyLogBehaviorTest {
         onView(withId(R.id.view_tasks_for_date_button)).perform(click());
         onView(withId(R.id.date_text_view)).check(matches(isDisplayed()));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd, YYYY", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
         onView(withId(R.id.date_text_view))
                 .check(matches(withText(DateUtils.formatDate(Calendar.getInstance().getTime(), dateFormat))));
     }

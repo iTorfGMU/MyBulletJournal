@@ -35,6 +35,14 @@ public class AddNewTaskContract {
         void onCreateTaskComplete();
 
         void setDate();
+
+        long getDate();
+
+        boolean wasTimeSelected();
+
+        void handleRotation(String name, long date, boolean selectedTime);
+
+        int getLabelPosition(String label);
     }
 
     public interface View {
@@ -68,6 +76,10 @@ public class AddNewTaskContract {
         void onDatePicked(String date);
 
         void onTimePicked(String date);
+
+        void setTaskName(String name);
+
+        void setTaskLabel(int position);
 
         void dismiss();
     }

@@ -62,7 +62,7 @@ public class TaskListBehaviorTests {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(DateUtils.addDays(Calendar.getInstance().getTime(), 1));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd, YYYY", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
 
         onView(withId(R.id.date_text_view)).check(matches(withText(DateUtils.formatDate(cal.getTime(), dateFormat))));
     }
@@ -74,7 +74,7 @@ public class TaskListBehaviorTests {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(DateUtils.addDays(Calendar.getInstance().getTime(), -1));
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd, YYYY", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
 
         onView(withId(R.id.date_text_view)).check(matches(withText(DateUtils.formatDate(cal.getTime(), dateFormat))));
     }

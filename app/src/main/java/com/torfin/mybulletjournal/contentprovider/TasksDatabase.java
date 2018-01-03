@@ -11,7 +11,7 @@ import com.torfin.mybulletjournal.dataobjects.Task;
  * Created by torftorf1 on 12/26/17.
  */
 
-@Database(entities = {Task.class}, version = 2)
+@Database(entities = {Task.class}, version = 2, exportSchema = false)
 public abstract class TasksDatabase extends RoomDatabase {
 
     private static TasksDatabase instance;

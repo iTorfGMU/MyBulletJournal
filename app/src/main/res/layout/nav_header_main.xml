@@ -24,7 +24,8 @@
             android:layout_width="@dimen/nav_drawer_icon_width"
             android:layout_height="@dimen/nav_drawer_icon_height"
             android:layout_margin="@dimen/default_margin"
-            android:src="@drawable/ic_user_profile_24dp" />
+            app:srcCompat="@drawable/ic_user_profile_24dp"
+            android:contentDescription="@string/nav_menu_icon_cd"/>
 
         <TextView
             android:id="@+id/header"

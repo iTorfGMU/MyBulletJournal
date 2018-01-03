@@ -40,13 +40,19 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     private boolean allTasks;
 
+    private long dateToDisplay = -1;
+
+    public static final String DISPLAY_ALL_TASKS = "all_tasks";
+
+    public static final String DISPLAY_DATE_KEY = "date_to_display";
+
     public static TaskListPresenter newInstance(Context context) {
         return new TaskListPresenter(context);
     }
 
     private TaskListPresenter(Context context) {
         provider = TasksProvider.getInstance(context, this);
-        dateFormat = new SimpleDateFormat("EEEE, MMM dd, YYYY", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
         calendarDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
         timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
     }
@@ -54,36 +60,27 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
     @Override
     public void getTasks() {
         allTasks = true;
+
         this.view.showLoading();
         new RetrieveTasks().execute();
     }
 
     @Override
     public void getTasksWithDate() {
-        allTasks = false;
-
-        this.view.showLoading();
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
         long time = DateUtils.addDays(calendar.getTime(), numOfDaysDifference);
-        calendar.setTimeInMillis(time);
-        long dayOne = calendar.getTimeInMillis();
 
-        long nextDay = DateUtils.addDays(calendar.getTime(), 1);
-        calendar.setTimeInMillis(nextDay);
-        long dayTwo = calendar.getTimeInMillis();
-
-        new RetrieveTasksWithDate().execute(dayOne, dayTwo);
+        getTasksWithDate(time);
     }
 
     @Override
     public void getTasksWithDate(long date) {
+        allTasks = false;
+
+        this.view.showLoading();
+
         Calendar calendar = Calendar.getInstance();
 
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -96,6 +93,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         this.view.setDate(DateUtils.formatDate(calendar.getTime(), dateFormat));
 
         long dayOne = calendar.getTimeInMillis();
+
+        dateToDisplay = dayOne;
 
         long nextDay = DateUtils.addDays(calendar.getTime(), 1);
         calendar.setTimeInMillis(nextDay);
@@ -153,6 +152,16 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date);
         return timeFormat.format(calendar.getTime());
+    }
+
+    @Override
+    public long getCurrentlyDisplayedDate() {
+        return dateToDisplay;
+    }
+
+    @Override
+    public boolean showAllTasks() {
+        return allTasks;
     }
 
     @Override

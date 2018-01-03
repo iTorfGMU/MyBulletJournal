@@ -90,6 +90,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
             if (taskType != -1) {
                 this.taskIcon_ImageView.setImageResource(taskType);
                 this.taskIcon_ImageView.setVisibility(View.VISIBLE);
+                this.taskIcon_ImageView.setContentDescription(task.taskType + " icon");
             } else {
                 this.taskIcon_ImageView.setVisibility(View.GONE);
             }

@@ -35,11 +35,23 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     private Date selectedDate;
 
+    private boolean timeSelected;
+
     private SimpleDateFormat dateFormat;
 
     private SimpleDateFormat timeFormat;
 
     private Context context;
+
+    public static final String TASK_NAME_KEY = "task_name";
+
+    public static final String TASK_TYPE_KEY = "task_label";
+
+    public static final String TASK_LABEL_KEY = "task_type";
+
+    public static final String TASK_DATE_KEY = "task_date";
+
+    public static final String TASK_TIME_KEY = "task_time";
 
     public static AddNewTaskPresenter newInstance(Context c) {
         return new AddNewTaskPresenter(c);
@@ -49,10 +61,8 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
         this.context = c;
         tasksProvider = TasksProvider.getInstance(c, this);
         labelProvider = TaskLabelProvider.getInstance(this);
-        dateFormat = new SimpleDateFormat("EEEE, MMM dd, YYYY", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
         timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-
-        selectedDate = Calendar.getInstance().getTime();
     }
 
     @Override
@@ -109,8 +119,9 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
         if (selectedDate != null) {
             date = selectedDate.getTime();
+        } else {
+            date = Calendar.getInstance().getTimeInMillis();
         }
-
 
         Task task = new Task("", name, type, date, typeId, label);
         new AddTask().execute(task);
@@ -166,6 +177,48 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
     }
 
     @Override
+    public long getDate() {
+        long date = -1;
+
+        if (selectedDate != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(selectedDate);
+            date = calendar.getTimeInMillis();
+        }
+
+        return date;
+    }
+
+    @Override
+    public boolean wasTimeSelected() {
+        return timeSelected;
+    }
+
+    @Override
+    public void handleRotation(String name, long date, boolean selectedTime) {
+        this.view.setTaskName(name);
+        timeSelected = selectedTime;
+
+        if (date > 0){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date);
+
+            selectedDate = calendar.getTime();
+
+            this.view.onDatePicked(DateUtils.formatDate(selectedDate, dateFormat));
+
+            if (timeSelected) {
+                this.view.onTimePicked(DateUtils.formatDate(selectedDate, timeFormat));
+            }
+        }
+    }
+
+    @Override
+    public int getLabelPosition(String label) {
+        return labelProvider.getLabels().indexOf(label);
+    }
+
+    @Override
     public void successful() {
         //do nothing
     }
@@ -193,6 +246,8 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        timeSelected = true;
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(selectedDate);
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
