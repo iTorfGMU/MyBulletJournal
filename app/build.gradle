@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'AndroidKey'
             keyPassword 'mYbUlL3t'
-            storeFile file('$rootdir/mybulletjournal.jks')
+            storeFile file("$rootDir/mybulletjournal.jks")
             storePassword 'mYbUlL3t'
         }
     }
