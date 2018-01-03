@@ -8,6 +8,8 @@
 
     <string name="all_tasks_header">All Tasks</string>
 
+    <string name="first_label_option">Choose a task label</string>
+
     <!--Add New Tasks-->
     <string name="add_task_button">Add Task</string>
     <string name="task">Task:</string>
@@ -108,6 +110,14 @@
     <string name="snackbar_login_failed_message">Our apologies, log in failed. Please try again later.</string>
     <string name="snackbar_login_create_new_user_failed">Our apologies, creating a new user failed. Please try again later.</string>
     <string name="snackbar_no_connectivity_message">It appears you are not connected to a network.</string>
+    <string name="snackbar_task_details_update_failed">Oh no! Looks like something went wrong with updating the selected task. Please try again later!</string>
+    <string name="snackbar_task_details_deletion_failed">Oh no! Looks like something went wrong with deleting the selected task. Please try again later!</string>
+    <string name="snackbar_task_details_edit_failure">Oh no! Looks like something went wrong with attempting to edit this. Please try again later.</string>
+    <string name="snackbar_error_loading_task">Error loading task. Please try again later.</string>
 
+    <string name="snackbar_task_name_required">Task Name is Required.</string>
+    <string name="snackbar_task_label_required">Task Label is Required.</string>
+    <string name="snackbar_task_type_required">Task Type is Required.</string>
+    <string name="snackbar_task_added">Task Successfully Added!</string>
 
 </resources>

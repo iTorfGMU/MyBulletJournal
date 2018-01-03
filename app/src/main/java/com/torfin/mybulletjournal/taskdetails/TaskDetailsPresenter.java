@@ -58,7 +58,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
         selectedTask = provider.getTasks().get(id);
 
         if (selectedTask == null) {
-            this.view.onError("Error loading task. Please try again later.");
+            this.view.onError(R.string.snackbar_error_loading_task);
         }
 
         return selectedTask;
@@ -103,7 +103,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
     public void onEditSelected(Task task) {
          if (task == null) {
              canEdit = false;
-             this.view.onError("Oh no! Looks like something went wrong with attempting to edit this. Please try again later.");
+             this.view.onError(R.string.snackbar_task_details_edit_failure);
          } else if (!TaskTypeIds.isATask(task.taskTypeId)) {
              canEdit = false;
              this.view.setupDeleteTaskViews();
@@ -131,7 +131,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
             this.view.updateStatus(selectedTask);
             this.view.hideEditView();
         } else {
-            this.view.onError("Oh no! Looks like something went wrong with updating the selected task. Please try again later!");
+            this.view.onError(R.string.snackbar_task_details_update_failed);
         }
 
         this.view.hideLoading();
@@ -144,7 +144,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
         this.view.hideLoading();
 
         if (selectedTask == null) {
-            this.view.onError("Oh no! Looks like something went wrong with updating the selected task. Please try again later!");
+            this.view.onError(R.string.snackbar_task_details_deletion_failed);
         } else {
             if (canEdit) {
                 this.view.hideEditView();

@@ -3,10 +3,14 @@ package com.torfin.mybulletjournal.utils;
 import com.google.firebase.crash.FirebaseCrash;
 
 /**
- * Created by torftorf1 on 12/29/17.
+ * Created by Ila on 12/29/17.
  */
 
 public class CrashReportingUtils {
+
+    private CrashReportingUtils() {
+
+    }
 
     public static void reportCrash(Exception ex) {
         FirebaseCrash.report(ex);

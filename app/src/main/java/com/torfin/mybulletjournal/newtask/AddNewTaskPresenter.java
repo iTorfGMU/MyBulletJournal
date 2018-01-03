@@ -4,15 +4,14 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.torfin.mybulletjournal.R;
 import com.torfin.mybulletjournal.contentprovider.TaskLabelProvider;
 import com.torfin.mybulletjournal.contentprovider.TasksProvider;
 import com.torfin.mybulletjournal.dataobjects.Task;
-import com.torfin.mybulletjournal.taskdetails.TaskDetailsContract;
 import com.torfin.mybulletjournal.utils.DateUtils;
 import com.torfin.mybulletjournal.utils.ProfileUtils;
 
@@ -22,7 +21,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, ProfileUtils.VerifyListener, TasksProvider.TaskAdded,
         DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener, TaskLabelProvider.LabelsCallback {
@@ -73,12 +71,8 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
     @Override
     public List<String> getLabels() {
         List<String> labels = new ArrayList<>();
-        labels.add("Choose a task label");
-
-        for (String label : labelProvider.getLabels()) {
-            labels.add(label);
-        }
-
+        labels.add(context.getString(R.string.first_label_option));
+        labels.addAll(labelProvider.getLabels());
         return labels;
     }
 
@@ -94,17 +88,17 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
     @Override
     public boolean verifyForm(String name, String type, String label) {
         if (name == null || name.length() == 0) {
-            this.view.showMessage("Task Name is Required.");
+            this.view.showMessage(R.string.snackbar_task_name_required);
             return false;
         }
 
         if (label == null || label.length() == 0 || label.equals("Choose a task label")) {
-            this.view.showMessage("Task Label is Required.");
+            this.view.showMessage(R.string.snackbar_task_label_required);
             return false;
         }
 
         if (type == null || type.length() == 0 || type.equals("Choose a task type")) {
-            this.view.showMessage("Task Type is Required.");
+            this.view.showMessage(R.string.snackbar_task_type_required);
             return false;
         }
 
@@ -164,7 +158,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
     @Override
     public void onCreateTaskComplete() {
         view.hideLoading();
-        view.showMessage("Task Successfully Added");
+        view.showMessage(R.string.snackbar_task_added);
         view.dismiss();
     }
 

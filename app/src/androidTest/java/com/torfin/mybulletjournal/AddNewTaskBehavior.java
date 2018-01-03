@@ -34,7 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by torftorf1 on 1/1/18.
+ * Created by Ila on 1/1/18.
  */
 
 @RunWith(AndroidJUnit4.class)
