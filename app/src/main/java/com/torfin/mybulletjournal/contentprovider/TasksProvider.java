@@ -176,7 +176,7 @@ public class TasksProvider {
         return taskList;
     }
 
-    private void updateDatabase(Task task) {
+    private void updateNewDatabase(Task task) {
 
         String key = database.child("tasks").child(user.getUid()).push().getKey();
         task.uid = key;
@@ -186,6 +186,17 @@ public class TasksProvider {
         childUpdates.put("/tasks/" + user.getUid() + "/" + key, taskValues);
 
         database.updateChildren(childUpdates);
+    }
+
+
+    private void updateDatabase(Task task) {
+
+        Map<String, Object> taskValues = task.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/tasks/" + user.getUid() + "/" + task.uid, taskValues);
+
+        database.updateChildren(childUpdates);
 
         AnalyticUtils.sendAnalytics_TaskUpdated(task);
     }
@@ -193,7 +204,7 @@ public class TasksProvider {
     public void addTask(Task task) {
         AnalyticUtils.sendAnalytics_TaskAdded(task);
 
-        updateDatabase(task);
+        updateNewDatabase(task);
 
         tasks.put(task.uid, task);
         localDatabase.tasksDao().addTask(task);
