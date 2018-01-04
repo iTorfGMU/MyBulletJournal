@@ -54,16 +54,11 @@ public class MonthlyLogActivity extends AppCompatActivity implements MonthlyLogC
 
         presenter = MonthlyLogPresenter.newInstance(this);
 
+        presenter.subscribe(this);
+
         calendarView.setOnDateChangeListener(presenter);
 
         viewTasksButton.setOnClickListener(presenter);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        presenter.subscribe(this);
     }
 
     @Override
@@ -73,7 +68,6 @@ public class MonthlyLogActivity extends AppCompatActivity implements MonthlyLogC
 
         super.onDestroy();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

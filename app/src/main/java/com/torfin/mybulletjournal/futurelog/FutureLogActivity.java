@@ -66,13 +66,13 @@ public class FutureLogActivity extends AppCompatActivity implements FutureLogCon
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         presenter = FutureLogPresenter.newInstance(this);
+        presenter.subscribe(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        presenter.subscribe(this);
         presenter.configureRecyclerView();
     }
 

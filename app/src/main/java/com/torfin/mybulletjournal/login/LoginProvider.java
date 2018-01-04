@@ -36,21 +36,15 @@ public class LoginProvider {
 
         void loginSuccessful();
 
-        void loginFailed();
+        void loginFailed(String reason);
 
-        void createUserFailed();
+        void createUserFailed(String reason);
 
         void validationSuccessful();
 
         void validationFailed();
     }
-
-    private LoginProvider(LoginCallback callback) {
-        this.auth = FirebaseAuth.getInstance();
-        this.callback = callback;
-        this.database = FirebaseDatabase.getInstance().getReference();
-    }
-
+    
     static LoginProvider getInstance(LoginCallback callback) {
         if (instance == null) {
             synchronized (LoginProvider.class) {
@@ -61,6 +55,12 @@ public class LoginProvider {
         }
 
         return instance;
+    }
+
+    private LoginProvider(LoginCallback callback) {
+        this.auth = FirebaseAuth.getInstance();
+        this.callback = callback;
+        this.database = FirebaseDatabase.getInstance().getReference();
     }
 
     public static void setMockInstance(LoginProvider mockInstance) {
@@ -86,7 +86,7 @@ public class LoginProvider {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             CrashReportingUtils.logError("createUserWithEmail:failure " + task.getException());
-                            callback.createUserFailed();
+                            callback.createUserFailed(task.getException().getLocalizedMessage());
                         }
                     }
                 });
@@ -107,7 +107,7 @@ public class LoginProvider {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             CrashReportingUtils.logError("signInWithEmail:failure " + task.getException());
-                            callback.loginFailed();
+                            callback.loginFailed(task.getException().getLocalizedMessage());
                         }
                     }
                 });

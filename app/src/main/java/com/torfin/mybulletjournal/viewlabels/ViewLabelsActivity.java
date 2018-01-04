@@ -86,6 +86,7 @@ public class ViewLabelsActivity extends AppCompatActivity implements ViewLabelsC
     protected void onDestroy() {
         presenter.unsubscribe(this);
         presenter = null;
+
         super.onDestroy();
     }
 

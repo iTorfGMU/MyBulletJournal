@@ -157,9 +157,9 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void onCreateTaskComplete() {
-        view.hideLoading();
-        view.showMessage(R.string.snackbar_task_added);
-        view.dismiss();
+        this.view.hideLoading();
+        this.view.showMessage(R.string.snackbar_task_added);
+        this.view.dismiss();
     }
 
     @Override

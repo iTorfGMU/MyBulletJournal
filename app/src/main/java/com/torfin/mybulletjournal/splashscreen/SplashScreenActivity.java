@@ -27,12 +27,12 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         ButterKnife.bind(this);
 
         presenter = SplashScreenPresenter.newInstance(this);
+        presenter.subscribe(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.subscribe(this);
         presenter.determineNextPage();
     }
 

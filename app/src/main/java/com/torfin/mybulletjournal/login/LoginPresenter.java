@@ -81,15 +81,23 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     }
 
     @Override
-    public void loginFailed() {
+    public void loginFailed(String reason) {
         this.view.hideLoading();
-        this.view.onError(R.string.snackbar_login_failed_message);
+        if (reason == null || reason.length() == 0) {
+            this.view.onError(R.string.snackbar_login_failed_message);
+        } else {
+            this.view.onError(reason);
+        }
     }
 
     @Override
-    public void createUserFailed() {
+    public void createUserFailed(String reason) {
         this.view.hideLoading();
-        this.view.onError(R.string.snackbar_login_create_new_user_failed);
+        if (reason == null || reason.length() == 0) {
+            this.view.onError(R.string.snackbar_login_create_new_user_failed);
+        } else {
+            this.view.onError(reason);
+        }
     }
 
     @Override

@@ -104,19 +104,6 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        presenter.unsubscribe(this);
-        presenter = null;
-
-        super.onDestroy();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.task_details_menu, menu);
 
@@ -132,6 +119,8 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                presenter.unsubscribe(this);
+                presenter = null;
                 finish();
                 return true;
             case R.id.action_signout:

@@ -57,22 +57,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         ButterKnife.bind(this);
 
         presenter = LoginPresenter.newInstance();
+        presenter.subscribe(this);
 
         createUserButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        presenter.subscribe(this);
-    }
-
-    @Override
     protected void onDestroy() {
         presenter.unsubscribe(this);
         presenter = null;
+
         super.onDestroy();
     }
 
