@@ -93,7 +93,7 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
 
         setSupportActionBar(toolbar);
 
-        this.presenter = AddNewTaskPresenter.newInstance(this);
+        this.presenter = AddNewTaskPresenter.newInstance(this, this);
         this.presenter.subscribe(this);
 
         taskDateTextView.setOnClickListener(this);
