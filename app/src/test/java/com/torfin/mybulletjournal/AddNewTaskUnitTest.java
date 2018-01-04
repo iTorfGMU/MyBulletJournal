@@ -162,7 +162,7 @@ public class AddNewTaskUnitTest {
         presenter.onCreateTaskComplete();
 
         verify(view).hideLoading();
-        verify(view).showMessage("Task Successfully Added");
+        verify(view).showMessage(R.string.snackbar_task_added);
         verify(view).dismiss();
     }
 

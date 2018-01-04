@@ -53,6 +53,10 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     public static final String TASK_TIME_KEY = "task_time";
 
+    public static AddNewTaskPresenter newInstance(Context c) {
+        return newInstance(c, null);
+    }
+
     public static AddNewTaskPresenter newInstance(Context c, Resubscribe callback) {
         return new AddNewTaskPresenter(c, callback);
     }
@@ -289,8 +293,8 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
         }
     }
 
-    public void checkView() {
-        if (this.view == null) {
+    private void checkView() {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }

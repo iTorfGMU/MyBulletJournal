@@ -150,7 +150,7 @@ public class LoginPresenterTest {
     public void test_verify_login_failed() {
         presenter.subscribe(view);
 
-        presenter.loginFailed();
+        presenter.loginFailed("Invalid email");
 
         verify(view).hideLoading();
         verify(view, never()).loginUser();
@@ -161,7 +161,7 @@ public class LoginPresenterTest {
     public void test_verify_createUser_failed() {
         presenter.subscribe(view);
 
-        presenter.createUserFailed();
+        presenter.createUserFailed("Invalid email");
 
         verify(view).hideLoading();
         verify(view, never()).loginUser();

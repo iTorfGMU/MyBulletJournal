@@ -33,6 +33,10 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     private Resubscribe callback;
 
+    public static TaskDetailsPresenter newInstance(Context c) {
+         return newInstance(c, null);
+    }
+
     public static TaskDetailsPresenter newInstance(Context c, Resubscribe callback) {
         return new TaskDetailsPresenter(c, callback);
     }
@@ -208,7 +212,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
     }
 
     private void checkView() {
-        if (this.view == null) {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }

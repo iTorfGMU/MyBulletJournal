@@ -20,6 +20,10 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
 
     private Resubscribe callback;
 
+    public static SplashScreenPresenter newInstance(Context c) {
+        return newInstance(c, null);
+    }
+
     public static SplashScreenPresenter newInstance(Context c, Resubscribe callback) {
         return new SplashScreenPresenter(c, callback);
     }

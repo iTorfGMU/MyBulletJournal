@@ -34,6 +34,10 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
 
     private Resubscribe callback;
 
+    public static FutureLogPresenter newInstance(Context c) {
+        return newInstance(c, null);
+    }
+
     public static FutureLogPresenter newInstance(Context c, Resubscribe callback) {
         return new FutureLogPresenter(c, callback);
     }
@@ -120,7 +124,7 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
     }
 
     private void checkView() {
-        if (this.view == null) {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }

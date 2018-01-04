@@ -116,7 +116,7 @@ public class TaskDetailsUnitTest {
         provider.setTasks(tasks);
 
         assertNull(presenter.getTask(taskNotAdded.uid));
-        verify(view).onError(anyString());
+        verify(view).onError(R.string.snackbar_error_loading_task);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class TaskDetailsUnitTest {
     public void test_onEditSelected_TaskNull() {
 
         presenter.onEditSelected(null);
-        verify(view).onError(anyString());
+        verify(view).onError(R.string.snackbar_task_details_edit_failure);
         verify(view, never()).setupEditView();
         verify(view, never()).setupDeleteTaskViews();
     }
@@ -213,7 +213,7 @@ public class TaskDetailsUnitTest {
         verify(view).hideLoading();
         verify(view, never()).updateStatus(task);
         verify(view, never()).setupEditView();
-        verify(view).onError(anyString());
+        verify(view).onError(R.string.snackbar_task_details_update_failed);
     }
 
     @Test

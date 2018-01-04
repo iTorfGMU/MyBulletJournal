@@ -22,6 +22,10 @@ public class MonthlyLogPresenter implements MonthlyLogContract.Presenter, Calend
 
     private Resubscribe callback;
 
+    public static MonthlyLogPresenter newInstance(Context c) {
+        return newInstance(c, null);
+    }
+
     public static MonthlyLogPresenter newInstance(Context c, Resubscribe callback) {
         return new MonthlyLogPresenter(c, callback);
     }
@@ -81,7 +85,7 @@ public class MonthlyLogPresenter implements MonthlyLogContract.Presenter, Calend
     }
 
     private void checkView() {
-        if (this.view == null) {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }

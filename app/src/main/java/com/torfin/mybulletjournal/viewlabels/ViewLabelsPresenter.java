@@ -17,6 +17,10 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
 
     private Resubscribe callback;
 
+    public static ViewLabelsPresenter newInstance(Context c) {
+        return newInstance(c, null);
+    }
+
     public static ViewLabelsPresenter newInstance(Context c, Resubscribe callback) {
         return new ViewLabelsPresenter(c, callback);
     }
@@ -62,7 +66,7 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
     }
 
     private void checkView() {
-        if (this.view == null) {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }

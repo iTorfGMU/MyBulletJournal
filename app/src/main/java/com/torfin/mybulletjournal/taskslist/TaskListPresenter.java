@@ -46,6 +46,10 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     public static final String DISPLAY_DATE_KEY = "date_to_display";
 
+    public static TaskListPresenter newInstance(Context context) {
+        return newInstance(context, null);
+    }
+
     public static TaskListPresenter newInstance(Context context, Resubscribe callback) {
         return new TaskListPresenter(context, callback);
     }
@@ -256,7 +260,7 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
     }
 
     private void checkView() {
-        if (this.view == null) {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }

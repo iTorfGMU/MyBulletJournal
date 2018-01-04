@@ -17,6 +17,10 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
 
     private Resubscribe callback;
 
+    public static LoginPresenter newInstance() {
+        return newInstance(null);
+    }
+
     public static LoginPresenter newInstance(Resubscribe callback) {
         return new LoginPresenter(callback);
     }
@@ -127,7 +131,7 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     }
 
     private void checkView() {
-        if (this.view == null) {
+        if (this.view == null && callback != null) {
             callback.resubscribeView();
         }
     }
