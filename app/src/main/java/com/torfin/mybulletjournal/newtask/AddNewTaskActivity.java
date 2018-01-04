@@ -36,7 +36,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskContract.View, View.OnClickListener {
+public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskContract.View, View.OnClickListener, AddNewTaskPresenter.Resubscribe {
 
     @BindView(R.id.add_tasks_toolbar)
     Toolbar toolbar;
@@ -335,5 +335,10 @@ public class AddNewTaskActivity extends AppCompatActivity implements AddNewTaskC
                     TaskTypeIds.getTaskTypeId(taskTypeSpinner.getSelectedItem().toString(), this),
                     taskLabelSpinner.getSelectedItem().toString());
         }
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

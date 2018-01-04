@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by Ila on 12/4/17.
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements LoginContract.View, View.OnClickListener, LoginPresenter.Resubscribe {
 
     @BindView(R.id.email_edittext)
     EditText email;
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         ButterKnife.bind(this);
 
-        presenter = LoginPresenter.newInstance();
+        presenter = LoginPresenter.newInstance(this);
         presenter.subscribe(this);
 
         createUserButton.setOnClickListener(this);
@@ -139,5 +139,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             default:
                 break;
         }
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

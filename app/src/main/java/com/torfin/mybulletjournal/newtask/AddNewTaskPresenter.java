@@ -41,6 +41,8 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     private Context context;
 
+    private Resubscribe callback;
+
     public static final String TASK_NAME_KEY = "task_name";
 
     public static final String TASK_TYPE_KEY = "task_label";
@@ -51,12 +53,13 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     public static final String TASK_TIME_KEY = "task_time";
 
-    public static AddNewTaskPresenter newInstance(Context c) {
-        return new AddNewTaskPresenter(c);
+    public static AddNewTaskPresenter newInstance(Context c, Resubscribe callback) {
+        return new AddNewTaskPresenter(c, callback);
     }
 
-    private AddNewTaskPresenter(Context c) {
+    private AddNewTaskPresenter(Context c, Resubscribe callback) {
         this.context = c;
+        this.callback = callback;
         tasksProvider = TasksProvider.getInstance(c, this);
         labelProvider = TaskLabelProvider.getInstance(this);
         dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
@@ -87,6 +90,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public boolean verifyForm(String name, String type, String label) {
+        checkView();
         if (name == null || name.length() == 0) {
             this.view.showMessage(R.string.snackbar_task_name_required);
             return false;
@@ -107,6 +111,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void createTask(@NonNull String name, @NonNull String type, int typeId, @NonNull String label) {
+        checkView();
         this.view.showLoading();
 
         long date = -1;
@@ -135,28 +140,33 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void handleDatePicker() {
+        checkView();
         this.view.hideTimePicker();
         this.view.showDatePicker();
     }
 
     @Override
     public void handleTimePicker() {
+        checkView();
         this.view.hideDatePicker();
         this.view.showTimePicker();
     }
 
     @Override
     public void dismissDatePicker() {
+        checkView();
         this.view.hideDatePicker();
     }
 
     @Override
     public void dismissTimePicker() {
+        checkView();
         this.view.hideTimePicker();
     }
 
     @Override
     public void onCreateTaskComplete() {
+        checkView();
         this.view.hideLoading();
         this.view.showMessage(R.string.snackbar_task_added);
         this.view.dismiss();
@@ -164,6 +174,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void setDate() {
+        checkView();
         selectedDate = this.view.getSelectedDate();
 
         this.view.hideDatePicker();
@@ -190,6 +201,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void handleRotation(String name, long date, boolean selectedTime) {
+        checkView();
         this.view.setTaskName(name);
         timeSelected = selectedTime;
 
@@ -219,6 +231,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void error() {
+        checkView();
         ProfileUtils.signout();
         this.view.signout();
     }
@@ -230,6 +243,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        checkView();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, monthOfYear, dayOfMonth);
         selectedDate = calendar.getTime();
@@ -240,6 +254,7 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
 
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        checkView();
         timeSelected = true;
 
         Calendar calendar = Calendar.getInstance();
@@ -274,6 +289,15 @@ public class AddNewTaskPresenter implements AddNewTaskContract.Presenter, Profil
         }
     }
 
+    public void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
+    }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public AddNewTaskContract.View getView() {

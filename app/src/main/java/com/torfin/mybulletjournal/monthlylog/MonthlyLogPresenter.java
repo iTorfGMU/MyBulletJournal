@@ -6,10 +6,7 @@ import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.widget.CalendarView;
 
-import com.torfin.mybulletjournal.taskslist.TasksListActivity;
-
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by torftorf1 on 12/25/17.
@@ -23,12 +20,16 @@ public class MonthlyLogPresenter implements MonthlyLogContract.Presenter, Calend
 
     private long selectedDate;
 
-    public static MonthlyLogPresenter newInstance(Context c) {
-        return new MonthlyLogPresenter(c);
+    private Resubscribe callback;
+
+    public static MonthlyLogPresenter newInstance(Context c, Resubscribe callback) {
+        return new MonthlyLogPresenter(c, callback);
     }
 
-    private MonthlyLogPresenter(Context c) {
+    private MonthlyLogPresenter(Context c, Resubscribe callback) {
         this.context = c;
+
+        this.callback = callback;
 
         Calendar calendar = Calendar.getInstance();
 
@@ -69,11 +70,23 @@ public class MonthlyLogPresenter implements MonthlyLogContract.Presenter, Calend
 
     @Override
     public void onClick(View v) {
+        checkView();
+
         this.view.showTaskListActivity(selectedDate);
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setSelectedDate(long day) {
         selectedDate = day;
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 }

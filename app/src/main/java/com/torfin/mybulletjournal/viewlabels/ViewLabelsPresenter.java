@@ -5,8 +5,6 @@ import android.support.annotation.VisibleForTesting;
 
 import com.torfin.mybulletjournal.contentprovider.TaskLabelProvider;
 
-import java.util.List;
-
 /**
  * Created by torftorf1 on 12/26/17.
  */
@@ -17,12 +15,15 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
 
     private ViewLabelsContract.View view;
 
-    public static ViewLabelsPresenter newInstance(Context c) {
-        return new ViewLabelsPresenter(c);
+    private Resubscribe callback;
+
+    public static ViewLabelsPresenter newInstance(Context c, Resubscribe callback) {
+        return new ViewLabelsPresenter(c, callback);
     }
 
-    private ViewLabelsPresenter(Context c) {
+    private ViewLabelsPresenter(Context c, Resubscribe callback) {
         labelProvider = TaskLabelProvider.getInstance(this);
+        this.callback = callback;
     }
 
     @Override
@@ -39,6 +40,8 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
 
     @Override
     public void setupViews() {
+        checkView();
+
         this.view.showLoading();
         this.view.setRecyclerView(labelProvider.getLabels());
         this.view.hideLoading();
@@ -46,6 +49,8 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
 
     @Override
     public void getUpdatedLabelList() {
+        checkView();
+
         labelProvider.getLabels();
         this.view.updateRecyclerView();
         this.view.stopRefresh();
@@ -54,6 +59,16 @@ public class ViewLabelsPresenter implements ViewLabelsContract.Presenter, TaskLa
     @Override
     public void labelsReturned() {
         getUpdatedLabelList();
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

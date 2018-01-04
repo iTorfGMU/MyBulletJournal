@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
  * Created by torftorf1 on 12/25/17.
  */
 
-public class SplashScreenActivity extends AppCompatActivity implements SplashScreenContract.View {
+public class SplashScreenActivity extends AppCompatActivity implements SplashScreenContract.View, SplashScreenPresenter.Resubscribe {
 
     private SplashScreenPresenter presenter;
 
@@ -26,7 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
         ButterKnife.bind(this);
 
-        presenter = SplashScreenPresenter.newInstance(this);
+        presenter = SplashScreenPresenter.newInstance(this, this);
         presenter.subscribe(this);
     }
 
@@ -53,5 +53,10 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     public void userSignIn() {
         LoginActivity.start(this);
         finish();
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

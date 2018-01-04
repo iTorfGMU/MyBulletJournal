@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by torftorf1 on 12/25/17.
  */
 
-public class MonthlyLogActivity extends AppCompatActivity implements MonthlyLogContract.View {
+public class MonthlyLogActivity extends AppCompatActivity implements MonthlyLogContract.View, MonthlyLogPresenter.Resubscribe {
 
     @BindView(R.id.monthly_log_toolbar)
     Toolbar toolbar;
@@ -52,7 +52,7 @@ public class MonthlyLogActivity extends AppCompatActivity implements MonthlyLogC
 
         setSupportActionBar(toolbar);
 
-        presenter = MonthlyLogPresenter.newInstance(this);
+        presenter = MonthlyLogPresenter.newInstance(this, this);
 
         presenter.subscribe(this);
 
@@ -101,5 +101,10 @@ public class MonthlyLogActivity extends AppCompatActivity implements MonthlyLogC
     public void showTaskListActivity(long selectedDate) {
         TasksListActivity.start(this, selectedDate);
         finish();
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

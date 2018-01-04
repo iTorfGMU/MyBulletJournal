@@ -44,7 +44,7 @@ public class LoginProvider {
 
         void validationFailed();
     }
-    
+
     static LoginProvider getInstance(LoginCallback callback) {
         if (instance == null) {
             synchronized (LoginProvider.class) {

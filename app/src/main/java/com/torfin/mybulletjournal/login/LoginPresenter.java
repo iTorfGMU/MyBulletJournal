@@ -1,7 +1,6 @@
 package com.torfin.mybulletjournal.login;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
 import com.torfin.mybulletjournal.R;
@@ -16,12 +15,15 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
 
     private LoginContract.View view;
 
-    public static LoginPresenter newInstance() {
-        return new LoginPresenter();
+    private Resubscribe callback;
+
+    public static LoginPresenter newInstance(Resubscribe callback) {
+        return new LoginPresenter(callback);
     }
 
-    private LoginPresenter() {
+    private LoginPresenter(Resubscribe callback) {
         this.provider = LoginProvider.getInstance(this);
+        this.callback = callback;
     }
 
     @Override
@@ -36,6 +38,8 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
 
     @Override
     public void onCreateAccountClicked(String email, String password, Activity activity) {
+        checkView();
+
         if (!validateForm(email, password)) {
             this.view.showMessage(R.string.snackbar_login_missing_fields_message);
             return;
@@ -47,6 +51,8 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
 
     @Override
     public void onLoginClicked(String email, String password, Activity activity) {
+        checkView();
+
         if (!validateForm(email, password)) {
             this.view.showMessage(R.string.snackbar_login_missing_fields_message);
             return;
@@ -76,12 +82,16 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
     //Provider Callback Methods
     @Override
     public void loginSuccessful() {
+        checkView();
+
         this.view.hideLoading();
         this.view.loginUser();
     }
 
     @Override
     public void loginFailed(String reason) {
+        checkView();
+
         this.view.hideLoading();
         if (reason == null || reason.length() == 0) {
             this.view.onError(R.string.snackbar_login_failed_message);
@@ -92,6 +102,8 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
 
     @Override
     public void createUserFailed(String reason) {
+        checkView();
+
         this.view.hideLoading();
         if (reason == null || reason.length() == 0) {
             this.view.onError(R.string.snackbar_login_create_new_user_failed);
@@ -102,12 +114,26 @@ public class LoginPresenter implements LoginContract.Presenter<LoginContract.Vie
 
     @Override
     public void validationSuccessful() {
+        checkView();
+
         this.view.hideLoading();
     }
 
     @Override
     public void validationFailed() {
+        checkView();
+
         this.view.hideLoading();
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

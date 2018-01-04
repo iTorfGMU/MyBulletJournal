@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  */
 
 public class ViewLabelsActivity extends AppCompatActivity implements ViewLabelsContract.View,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, ViewLabelsPresenter.Resubscribe {
 
     @BindView(R.id.view_labels_toolbar)
     Toolbar toolbar;
@@ -63,7 +63,7 @@ public class ViewLabelsActivity extends AppCompatActivity implements ViewLabelsC
 
         setSupportActionBar(toolbar);
 
-        presenter = ViewLabelsPresenter.newInstance(this);
+        presenter = ViewLabelsPresenter.newInstance(this, this);
         presenter.subscribe(this);
 
         labelsRecyclerView.setHasFixedSize(true);
@@ -147,5 +147,10 @@ public class ViewLabelsActivity extends AppCompatActivity implements ViewLabelsC
     @Override
     public void onRefresh() {
         presenter.getUpdatedLabelList();
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

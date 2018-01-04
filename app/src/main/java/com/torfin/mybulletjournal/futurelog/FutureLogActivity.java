@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by Ila on 12/25/17.
  */
 
-public class FutureLogActivity extends AppCompatActivity implements FutureLogContract.View{
+public class FutureLogActivity extends AppCompatActivity implements FutureLogContract.View, FutureLogPresenter.Resubscribe {
 
     @BindView(R.id.future_log_toolbar)
     Toolbar toolbar;
@@ -65,7 +65,7 @@ public class FutureLogActivity extends AppCompatActivity implements FutureLogCon
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        presenter = FutureLogPresenter.newInstance(this);
+        presenter = FutureLogPresenter.newInstance(this, this);
         presenter.subscribe(this);
     }
 
@@ -132,5 +132,10 @@ public class FutureLogActivity extends AppCompatActivity implements FutureLogCon
         } else {
             noFutureTasksView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

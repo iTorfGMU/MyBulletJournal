@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by torftorf1 on 12/25/17.
  */
 
-public class TaskDetailsActivity extends AppCompatActivity implements TaskDetailsContract.View, View.OnClickListener{
+public class TaskDetailsActivity extends AppCompatActivity implements TaskDetailsContract.View, View.OnClickListener, TaskDetailsPresenter.Resubscribe{
 
     @BindView(R.id.task_details_toolbar)
     Toolbar toolbar;
@@ -86,7 +86,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
 
         setSupportActionBar(toolbar);
 
-        presenter = TaskDetailsPresenter.newInstance(this);
+        presenter = TaskDetailsPresenter.newInstance(this, this);
         presenter.subscribe(this);
 
         selectedTask = presenter.getTask(getIntent().getStringExtra(taskKey) == null ? "" : getIntent().getStringExtra(taskKey));
@@ -224,5 +224,10 @@ public class TaskDetailsActivity extends AppCompatActivity implements TaskDetail
     @Override
     public void dismiss() {
         finish();
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

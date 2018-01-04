@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 
 import com.torfin.mybulletjournal.contentprovider.TasksProvider;
 import com.torfin.mybulletjournal.dataobjects.Task;
@@ -13,7 +12,6 @@ import com.torfin.mybulletjournal.utils.DateUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -42,15 +40,18 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     private long dateToDisplay = -1;
 
+    private Resubscribe callback;
+
     public static final String DISPLAY_ALL_TASKS = "all_tasks";
 
     public static final String DISPLAY_DATE_KEY = "date_to_display";
 
-    public static TaskListPresenter newInstance(Context context) {
-        return new TaskListPresenter(context);
+    public static TaskListPresenter newInstance(Context context, Resubscribe callback) {
+        return new TaskListPresenter(context, callback);
     }
 
-    private TaskListPresenter(Context context) {
+    private TaskListPresenter(Context context, Resubscribe callback) {
+        this.callback = callback;
         provider = TasksProvider.getInstance(context, this);
         dateFormat = new SimpleDateFormat("EEEE, MMM dd, yyyy", Locale.getDefault());
         calendarDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
@@ -59,6 +60,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void getTasks() {
+        checkView();
+
         allTasks = true;
 
         this.view.showLoading();
@@ -77,6 +80,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void getTasksWithDate(long date) {
+        checkView();
+
         allTasks = false;
 
         this.view.showLoading();
@@ -118,6 +123,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void setDate() {
+        checkView();
+
         long time = DateUtils.addDays(Calendar.getInstance().getTime(), numOfDaysDifference);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
@@ -132,6 +139,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void updateTasksList() {
+        checkView();
+
         this.view.updateTasks();
     }
 
@@ -166,6 +175,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void onGetTasksComplete(HashMap<String, Task> tasks) {
+        checkView();
+
         view.setAdapter(tasks);
 
         view.hideLoading();
@@ -179,6 +190,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void onGetTasksByDateComplete(List<Task> list) {
+        checkView();
+
         HashMap<String, Task> map = provider.convertListToMap(list);
 
         view.setAdapter(map);
@@ -198,6 +211,8 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
     @Override
     public void onRefresh() {
+        checkView();
+
         this.view.refreshAdapter(false);
         this.view.showLoading();
 
@@ -238,6 +253,16 @@ public class TaskListPresenter implements TaskListContract.Presenter, TasksProvi
 
             onGetTasksByDateComplete(tasks);
         }
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

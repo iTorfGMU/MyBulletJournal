@@ -31,12 +31,15 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     private boolean canEdit;
 
-    public static TaskDetailsPresenter newInstance(Context c) {
-        return new TaskDetailsPresenter(c);
+    private Resubscribe callback;
+
+    public static TaskDetailsPresenter newInstance(Context c, Resubscribe callback) {
+        return new TaskDetailsPresenter(c, callback);
     }
 
-    private TaskDetailsPresenter(Context c) {
+    private TaskDetailsPresenter(Context c, Resubscribe callback) {
         this.context = c;
+        this.callback = callback;
         this.provider = TasksProvider.getInstance(c, this);
         dateFormat = new SimpleDateFormat("MM/dd/yyyy @ hh:mm a", Locale.getDefault());
     }
@@ -58,6 +61,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
         selectedTask = provider.getTasks().get(id);
 
         if (selectedTask == null) {
+            checkView();
             this.view.onError(R.string.snackbar_error_loading_task);
         }
 
@@ -101,6 +105,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     @Override
     public void onEditSelected(Task task) {
+        checkView();
          if (task == null) {
              canEdit = false;
              this.view.onError(R.string.snackbar_task_details_edit_failure);
@@ -115,18 +120,21 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     @Override
     public void onUpdateTaskSelected(String selectedType) {
+        checkView();
         this.view.showLoading();
         new UpdateTask().execute(selectedType);
     }
 
     @Override
     public void onDeleteTaskSelected() {
+        checkView();
         this.view.showLoading();
         new DeleteTask().execute();
     }
 
     @Override
     public void onUpdateTaskComplete() {
+        checkView();
         if (selectedTask != null) {
             this.view.updateStatus(selectedTask);
             this.view.hideEditView();
@@ -140,7 +148,7 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
     @Override
     public void onDeleteTaskComplete() {
-
+        checkView();
         this.view.hideLoading();
 
         if (selectedTask == null) {
@@ -197,6 +205,16 @@ public class TaskDetailsPresenter implements TaskDetailsContract.Presenter, Task
 
             onDeleteTaskComplete();
         }
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

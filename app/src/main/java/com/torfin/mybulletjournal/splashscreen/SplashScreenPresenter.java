@@ -6,7 +6,6 @@ import android.support.annotation.VisibleForTesting;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.torfin.mybulletjournal.utils.AnalyticUtils;
 
 /**
@@ -19,16 +18,21 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
 
     private FirebaseUser user;
 
-    public static SplashScreenPresenter newInstance(Context c) {
-        return new SplashScreenPresenter(c);
+    private Resubscribe callback;
+
+    public static SplashScreenPresenter newInstance(Context c, Resubscribe callback) {
+        return new SplashScreenPresenter(c, callback);
     }
 
-    private SplashScreenPresenter(Context c) {
+    private SplashScreenPresenter(Context c, Resubscribe callback) {
         AnalyticUtils.init(c);
+        this.callback = callback;
     }
 
     @Override
     public void determineNextPage() {
+        checkView();
+
         if (user == null) {
             this.view.userSignIn();
         } else {
@@ -64,5 +68,15 @@ public class SplashScreenPresenter implements SplashScreenContract.Presenter {
         }
 
         return user;
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 }

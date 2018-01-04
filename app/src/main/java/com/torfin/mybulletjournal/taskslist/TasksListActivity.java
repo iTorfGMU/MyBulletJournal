@@ -38,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TasksListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        TaskListContract.View, View.OnClickListener {
+        TaskListContract.View, View.OnClickListener, TaskListPresenter.Resubscribe {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -105,7 +105,7 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
 
         setSupportActionBar(toolbar);
 
-        presenter = TaskListPresenter.newInstance(this);
+        presenter = TaskListPresenter.newInstance(this, this);
         presenter.subscribe(this);
 
         final Context context = this;
@@ -312,5 +312,10 @@ public class TasksListActivity extends AppCompatActivity implements NavigationVi
     private void getTasks(int value) {
         presenter.onDateButtonPressed(value);
         presenter.getTasksWithDate();
+    }
+
+    @Override
+    public void resubscribeView() {
+        presenter.subscribe(this);
     }
 }

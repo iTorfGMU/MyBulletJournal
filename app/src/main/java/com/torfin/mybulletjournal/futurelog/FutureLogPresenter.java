@@ -32,12 +32,15 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
 
     private List<Object> log;
 
-    public static FutureLogPresenter newInstance(Context c) {
-        return new FutureLogPresenter(c);
+    private Resubscribe callback;
+
+    public static FutureLogPresenter newInstance(Context c, Resubscribe callback) {
+        return new FutureLogPresenter(c, callback);
     }
 
-    private FutureLogPresenter(Context c) {
+    private FutureLogPresenter(Context c, Resubscribe callback) {
         provider = TasksProvider.getInstance(c, this);
+        this.callback = callback;
     }
 
     @Override
@@ -114,6 +117,16 @@ public class FutureLogPresenter implements FutureLogContract.Presenter, TasksPro
 
             onGetFutureTasksComplete(list);
         }
+    }
+
+    private void checkView() {
+        if (this.view == null) {
+            callback.resubscribeView();
+        }
+    }
+
+    public interface Resubscribe {
+        void resubscribeView();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
